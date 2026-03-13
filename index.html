@@ -526,19 +526,19 @@
       <span class="filter-label">▸ Filter Date</span>
       <div class="date-btns" id="dateBtns">
         <button class="date-btn active" data-date="all">All</button>
-        <button class="date-btn active" data-date="Feb 28">Feb 28</button>
-        <button class="date-btn active" data-date="Mar 1">Mar 1</button>
-        <button class="date-btn active" data-date="Mar 2">Mar 2</button>
-        <button class="date-btn active" data-date="Mar 3">Mar 3</button>
-        <button class="date-btn active" data-date="Mar 4">Mar 4</button>
-        <button class="date-btn active" data-date="Mar 5">Mar 5</button>
-        <button class="date-btn active" data-date="Mar 6">Mar 6</button>
-        <button class="date-btn active" data-date="Mar 7">Mar 7</button>
-        <button class="date-btn active" data-date="Mar 8">Mar 8</button>
-        <button class="date-btn active" data-date="Mar 9">Mar 9</button>
-        <button class="date-btn active" data-date="Mar 10">Mar 10</button>
-        <button class="date-btn active" data-date="Mar 11">Mar 11</button>
-        <button class="date-btn active" data-date="Mar 12">Mar 12</button>
+        <button class="date-btn" data-date="Feb 28">Feb 28</button>
+        <button class="date-btn" data-date="Mar 1">Mar 1</button>
+        <button class="date-btn" data-date="Mar 2">Mar 2</button>
+        <button class="date-btn" data-date="Mar 3">Mar 3</button>
+        <button class="date-btn" data-date="Mar 4">Mar 4</button>
+        <button class="date-btn" data-date="Mar 5">Mar 5</button>
+        <button class="date-btn" data-date="Mar 6">Mar 6</button>
+        <button class="date-btn" data-date="Mar 7">Mar 7</button>
+        <button class="date-btn" data-date="Mar 8">Mar 8</button>
+        <button class="date-btn" data-date="Mar 9">Mar 9</button>
+        <button class="date-btn" data-date="Mar 10">Mar 10</button>
+        <button class="date-btn" data-date="Mar 11">Mar 11</button>
+        <button class="date-btn" data-date="Mar 12">Mar 12</button>
       </div>
     </div>
 
@@ -547,11 +547,11 @@
       <span class="filter-label">▸ Category</span>
       <div class="cat-btns" id="catBtns">
         <button class="cat-btn all active" data-cat="all">All Types</button>
-        <button class="cat-btn mil active" data-cat="mil">Military</button>
-        <button class="cat-btn econ active" data-cat="econ">Energy</button>
-        <button class="cat-btn dipl active" data-cat="dipl">Diplomatic</button>
-        <button class="cat-btn hum active" data-cat="hum">Humanitarian</button>
-        <button class="cat-btn naval active" data-cat="naval">Maritime</button>
+        <button class="cat-btn mil" data-cat="mil">Military</button>
+        <button class="cat-btn econ" data-cat="econ">Energy</button>
+        <button class="cat-btn dipl" data-cat="dipl">Diplomatic</button>
+        <button class="cat-btn hum" data-cat="hum">Humanitarian</button>
+        <button class="cat-btn naval" data-cat="naval">Maritime</button>
       </div>
     </div>
 
@@ -1295,91 +1295,47 @@ const cfg = { displayModeBar: false, responsive: true };
   const allDays   = document.querySelectorAll('.timeline-day');
   const dateBtns  = document.querySelectorAll('#dateBtns .date-btn');
   const catBtns   = document.querySelectorAll('#catBtns .cat-btn');
-  const allCatBtn = document.querySelector('#catBtns .cat-btn[data-cat="all"]');
 
-  const ALL_DATES = ['Feb 28','Mar 1','Mar 2','Mar 3','Mar 4','Mar 5','Mar 6',
-                     'Mar 7','Mar 8','Mar 9','Mar 10','Mar 11','Mar 12'];
-
-  // All dates active by default
-  let activeDates = new Set(ALL_DATES);
-  let activeCats  = new Set(['mil','econ','dipl','hum','naval']);
-
-  function syncAllDateBtn() {
-    const allBtn = document.querySelector('#dateBtns .date-btn[data-date="all"]');
-    allBtn.classList.toggle('active', ALL_DATES.every(d => activeDates.has(d)));
-  }
+  // Single-select: 'all' shows everything; any specific value shows only that
+  let activeDateFilter = 'all';
+  let activeCatFilter  = 'all';
 
   function applyFilters() {
+    const catKeys = ['mil','econ','dipl','hum','naval'];
     let visibleCount = 0;
     allDays.forEach(day => {
-      const dateAttr = day.dataset.date;
-      if (!activeDates.has(dateAttr)) {
-        day.classList.add('hidden');
-        return;
-      }
-      const events   = day.querySelectorAll('.event-item');
-      const catKeys  = ['mil','econ','dipl','hum','naval'];
+      const dateMatch = activeDateFilter === 'all' || day.dataset.date === activeDateFilter;
+      if (!dateMatch) { day.classList.add('hidden'); return; }
+      const events = day.querySelectorAll('.event-item');
       let eventsVisible = 0;
       events.forEach(ev => {
-        const evCat = catKeys.find(c => ev.classList.contains(c));
-        if (!evCat || activeCats.has(evCat)) {
-          ev.classList.remove('filtered');
-          eventsVisible++;
-        } else {
-          ev.classList.add('filtered');
-        }
+        const evCat    = catKeys.find(c => ev.classList.contains(c));
+        const catMatch = activeCatFilter === 'all' || evCat === activeCatFilter;
+        if (catMatch) { ev.classList.remove('filtered'); eventsVisible++; }
+        else          { ev.classList.add('filtered'); }
       });
-      if (eventsVisible > 0) {
-        day.classList.remove('hidden');
-        visibleCount++;
-      } else {
-        day.classList.add('hidden');
-      }
+      if (eventsVisible > 0) { day.classList.remove('hidden'); visibleCount++; }
+      else                   { day.classList.add('hidden'); }
     });
     noResults.classList.toggle('visible', visibleCount === 0);
   }
 
-  // ── Date buttons (multi-select) ──────────────────────────────────
+  // ── Date buttons (single-select) ────────────────────────────────
   dateBtns.forEach(btn => {
     btn.addEventListener('click', function() {
-      const dateVal = this.dataset.date;
-      if (dateVal === 'all') {
-        // Activate all
-        activeDates = new Set(ALL_DATES);
-        dateBtns.forEach(b => b.classList.add('active'));
-      } else {
-        if (activeDates.has(dateVal)) {
-          activeDates.delete(dateVal);
-          this.classList.remove('active');
-          // Deactivate "All" button (others remain active)
-          document.querySelector('#dateBtns .date-btn[data-date="all"]').classList.remove('active');
-        } else {
-          activeDates.add(dateVal);
-          this.classList.add('active');
-          syncAllDateBtn();
-        }
-      }
+      activeDateFilter = this.dataset.date;
+      dateBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
       applyFilters();
     });
   });
 
-  // ── Category toggle buttons ───────────────────────────────────
+  // ── Category buttons (single-select) ────────────────────────────
   catBtns.forEach(btn => {
     btn.addEventListener('click', function() {
-      const cat = this.dataset.cat;
-      if (cat === 'all') {
-        activeCats = new Set(['mil','econ','dipl','hum','naval']);
-        catBtns.forEach(b => b.classList.add('active'));
-      } else {
-        if (activeCats.has(cat)) {
-          activeCats.delete(cat);
-          this.classList.remove('active');
-        } else {
-          activeCats.add(cat);
-          this.classList.add('active');
-        }
-        allCatBtn.classList.toggle('active', activeCats.size === 5);
-      }
+      activeCatFilter = this.dataset.cat;
+      catBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
       applyFilters();
     });
   });
@@ -1431,11 +1387,11 @@ const cfg = { displayModeBar: false, responsive: true };
   const FLIGHT_VALUES = [1100, 1180, 1120, 1100, 1180, 400, 0, 220, 300, 280];
 
   const THEME4 = {
-    bg: '#0e1118', paper: '#0e1118',
-    grid: 'rgba(255,255,255,0.06)', line: 'rgba(255,255,255,0.1)',
-    txt: '#c8cdd8',
+    bg: '#ffffff', paper: '#ffffff',
+    grid: '#e8eaef', line: '#c8cdd9',
+    txt: '#4a5270',
     cyan: '#1a9e99', red: '#c23b3b', gold: '#9a7320',
-    green: '#2e8a5a', blue: '#2f65c4', orange: '#b85a28', muted: '#4a5568',
+    green: '#2e8a5a', blue: '#2f65c4', orange: '#b85a28', muted: '#6b7280',
   };
 
   function baseL4(xTitle, yTitle, extra={}) {
@@ -1454,7 +1410,7 @@ const cfg = { displayModeBar: false, responsive: true };
         tickfont: { size: 10 }, zeroline: false,
       },
       showlegend: true,
-      legend: { bgcolor: 'rgba(0,0,0,0.4)', bordercolor: THEME4.line, borderwidth: 1, font: { size: 10 }, x: 0.01, y: 0.99, xanchor: 'left', yanchor: 'top' },
+      legend: { bgcolor: 'rgba(255,255,255,0.92)', bordercolor: THEME4.line, borderwidth: 1, font: { size: 10 }, x: 0.01, y: 0.99, xanchor: 'left', yanchor: 'top' },
       hovermode: 'closest',
       hoverlabel: { bgcolor: '#f0f2f7', bordercolor: THEME4.line, font: { size: 11, family: 'IBM Plex Mono, monospace', color: '#1a1e2e' } },
       ...extra,
@@ -1493,13 +1449,33 @@ const cfg = { displayModeBar: false, responsive: true };
     }
 
     else if (key === 'stockpile') {
-      const colors = ['#4a5568','#4a5568','#4a5568','#4a5568', THEME4.red];
-      const otherUS = SPR_US.map((u,i) => SPR_TOTALS[i] - u);
-      const trUS    = { x: SPR_EVENTS, y: SPR_US, type: 'bar', name: 'US Contribution', marker: { color: colors }, hovertemplate: '%{x}<br>US: <b>%{y}M bbl</b><extra></extra>' };
-      const trOther = { x: SPR_EVENTS, y: otherUS, type: 'bar', name: 'Other IEA Members', marker: { color: colors.map(c => c === THEME4.red ? 'rgba(194,59,59,0.4)' : 'rgba(74,85,104,0.4)') }, hovertemplate: '%{x}<br>Other IEA: <b>%{y}M bbl</b><extra></extra>' };
-      const layout = { ...baseL4(null, 'Million Barrels', { barmode: 'stack' }), margin: { l: 80, r: 20, t: 20, b: 60 } };
+      // Non-2026 events: single total bar (no US breakdown).  2026: stacked (Other IEA + US SPR)
+      const SPR_LABELS = ['Gulf War 1991','Katrina 2005','Libya 2011','Ukraine 2022','Iran Crisis 2026'];
+      const trBase = {
+        x: SPR_LABELS, y: [75, 60, 60, 182.7, 0], type: 'bar', name: 'Total Release',
+        marker: { color: 'rgba(74,85,104,0.65)' },
+        text: ['75M bbl','60M bbl','60M bbl','182.7M bbl',''],
+        textposition: 'outside', textfont: { size: 9, color: THEME4.txt },
+        hovertemplate: '%{x}<br>Total: <b>%{y}M bbl</b><extra></extra>',
+      };
+      const trOther = {
+        x: SPR_LABELS, y: [0, 0, 0, 0, 228], type: 'bar', name: 'Other IEA Members',
+        marker: { color: 'rgba(194,59,59,0.38)' },
+        text: ['','','','','228M bbl'], textposition: 'inside',
+        textfont: { size: 9, color: '#ffffff' },
+        hovertemplate: '%{x}<br>Other IEA: <b>%{y}M bbl</b><extra></extra>',
+      };
+      const trUS = {
+        x: SPR_LABELS, y: [0, 0, 0, 0, 172], type: 'bar', name: 'U.S. SPR',
+        marker: { color: THEME4.red },
+        text: ['','','','','172M bbl  (400M total)'], textposition: 'outside',
+        textfont: { size: 9, color: THEME4.red },
+        hovertemplate: '%{x}<br>US SPR: <b>%{y}M bbl</b><extra></extra>',
+      };
+      const layout = { ...baseL4(null, 'Million Barrels', { barmode: 'stack' }), margin: { l: 80, r: 20, t: 30, b: 50 } };
       layout.xaxis.tickfont = { size: 9 };
-      Plotly.react('plot4', [trUS, trOther], layout, cfg4);
+      layout.yaxis.range = [0, 470];
+      Plotly.react('plot4', [trBase, trOther, trUS], layout, cfg4);
     }
 
     else if (key === 'sprlevel') {
@@ -1516,35 +1492,80 @@ const cfg = { displayModeBar: false, responsive: true };
     }
 
     else if (key === 'flowrates') {
-      const colors = ['#4a5568','#4a5568','#4a5568','#4a5568', THEME4.red];
-      const trace = { x: SPR_EVENTS, y: FLOW_RATES, type: 'bar', name: 'Flow Rate (M bbl/d)', marker: { color: colors }, hovertemplate: '%{x}<br><b>%{y}M bbl/d</b><extra></extra>' };
-      const layout = { ...baseL4(null, 'Million Barrels per Day'), margin: { l: 80, r: 20, t: 20, b: 60 }, showlegend: false };
+      const FR_LABELS = ['Gulf War 1991','Katrina 2005','Libya 2011','Ukraine 2022','Iran Crisis 2026'];
+      const FR_COLORS = ['rgba(74,85,104,0.65)','rgba(74,85,104,0.65)',
+                         'rgba(74,85,104,0.65)','rgba(74,85,104,0.65)', THEME4.red];
+      const trace = {
+        x: FR_LABELS, y: FLOW_RATES, type: 'bar', name: 'Flow Rate (M bbl/d)',
+        marker: { color: FR_COLORS },
+        text: FLOW_RATES.map(v => v + 'M bbl/d'), textposition: 'outside',
+        textfont: { size: 9, color: THEME4.txt },
+        hovertemplate: '%{x}<br><b>%{y}M bbl/d</b><extra></extra>',
+      };
+      const layout = { ...baseL4(null, 'Million Barrels per Day'), margin: { l: 80, r: 20, t: 30, b: 50 }, showlegend: false };
       layout.xaxis.tickfont = { size: 9 };
-      layout.annotations = [{ x: 'Iran Crisis\n2026', y: 5.0, text: '5.0M bbl/d<br>Projected Record', showarrow: true, arrowhead: 2, arrowcolor: THEME4.red, font: { size: 9, color: THEME4.red }, ax: 60, ay: -30 }];
+      layout.yaxis.range = [0, 6.8];
+      layout.annotations = [{
+        x: 'Iran Crisis 2026', y: 5.0,
+        text: 'Projected Record<br>2.5× Gulf War rate',
+        showarrow: true, arrowhead: 2, arrowcolor: THEME4.red,
+        font: { size: 9, color: THEME4.red }, ax: 65, ay: -35,
+      }];
       Plotly.react('plot4', [trace], layout, cfg4);
     }
 
     else if (key === 'supplygap') {
-      const gapColors = [THEME4.red, THEME4.green, THEME4.green, THEME4.green, THEME4.orange];
-      const trace = {
-        type: 'waterfall', orientation: 'v',
-        x: GAP_LABELS, y: GAP_VALUES, measure: GAP_MEASURE,
-        name: 'Supply Gap Analysis',
-        connector: { line: { color: THEME4.line } },
-        decreasing: { marker: { color: THEME4.green } },
-        increasing: { marker: { color: THEME4.red } },
-        totals: { marker: { color: THEME4.orange } },
-        hovertemplate: '%{x}<br><b>%{y}M bbl/d</b><extra></extra>',
+      // Single horizontal stacked bar — 4 segments colored by supply alternative type
+      const YCAT = ['20M bbl/d at risk via Hormuz'];
+      const seg1 = {
+        y: YCAT, x: [6], type: 'bar', orientation: 'h',
+        name: 'Pipeline Alternatives (6M bbl/d)',
+        marker: { color: THEME4.green },
+        text: ['Pipelines<br>6M bbl/d'], textposition: 'inside',
+        textfont: { size: 9, color: '#ffffff' },
+        hovertemplate: 'Pipeline Alternatives<br><b>6M bbl/d</b><br>Saudi EPC + UAE Habshan-Fujairah<extra></extra>',
       };
-      const layout = { ...baseL4(null, 'Million Barrels per Day'), margin: { l: 80, r: 20, t: 20, b: 50 }, showlegend: false };
-      layout.yaxis.range = [0, 24];
-      Plotly.react('plot4', [trace], layout, cfg4);
+      const seg2 = {
+        y: YCAT, x: [5], type: 'bar', orientation: 'h',
+        name: 'IEA Stock Releases (5M bbl/d)',
+        marker: { color: THEME4.blue },
+        text: ['IEA Stocks<br>5M bbl/d'], textposition: 'inside',
+        textfont: { size: 9, color: '#ffffff' },
+        hovertemplate: 'IEA Stock Releases<br><b>5M bbl/d</b><br>Coordinated emergency release<extra></extra>',
+      };
+      const seg3 = {
+        y: YCAT, x: [1], type: 'bar', orientation: 'h',
+        name: 'Shadow Fleet Rerouting (1M bbl/d)',
+        marker: { color: THEME4.cyan },
+        text: ['1M'], textposition: 'inside',
+        textfont: { size: 9, color: '#ffffff' },
+        hovertemplate: 'Shadow Fleet Rerouting<br><b>1M bbl/d</b><extra></extra>',
+      };
+      const seg4 = {
+        y: YCAT, x: [8], type: 'bar', orientation: 'h',
+        name: 'Residual Gap — Unmitigated (8M bbl/d)',
+        marker: { color: THEME4.red },
+        text: ['Residual Gap<br>8M bbl/d'], textposition: 'inside',
+        textfont: { size: 9, color: '#ffffff' },
+        hovertemplate: 'Residual Gap (Unmitigated)<br><b>8M bbl/d</b><br>~8% of global supply<extra></extra>',
+      };
+      const layout = {
+        ...baseL4('Million Barrels per Day', null, { barmode: 'stack' }),
+        margin: { l: 185, r: 30, t: 20, b: 80 },
+      };
+      layout.xaxis.range = [0, 22];
+      layout.legend = {
+        bgcolor: 'rgba(255,255,255,0.92)', bordercolor: THEME4.line, borderwidth: 1,
+        font: { size: 9 }, orientation: 'h', x: 0.5, y: -0.22, xanchor: 'center', yanchor: 'top',
+      };
+      Plotly.react('plot4', [seg1, seg2, seg3, seg4], layout, cfg4);
     }
 
     else if (key === 'inflation') {
       const trace = { x: INF_VALUES, y: INF_COUNTRIES, type: 'bar', orientation: 'h', name: 'Inflation Impact', marker: { color: INF_VALUES.map(v => v >= 1.5 ? THEME4.red : v >= 1.0 ? THEME4.orange : THEME4.gold) }, hovertemplate: '%{y}<br><b>+%{x}pp</b> inflation impact<extra></extra>' };
       const layout = { ...baseL4('Percentage Point Increase', null), margin: { l: 90, r: 30, t: 20, b: 50 }, showlegend: false };
       layout.xaxis.ticksuffix = 'pp';
+      layout.xaxis.range = [0, 5];
       Plotly.react('plot4', [trace], layout, cfg4);
     }
 

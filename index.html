@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Iran–U.S. Conflict: Market Intelligence Report</title>
+<title>Iran–U.S. Conflict: Market Intelligence Report · March 12, 2026</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.1/plotly.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -21,6 +21,7 @@
     --accent-blue: #2f65c4;
     --accent-orange: #b85a28;
     --accent-cyan: #1a9e99;
+    --accent-purple: #6b4c9b;
     --label-bg: rgba(154,115,32,0.08);
   }
 
@@ -34,6 +35,7 @@
     line-height: 1.6;
   }
 
+  /* ── HEADER ── */
   .report-header {
     border-bottom: 1px solid var(--border-bright);
     padding: 32px 48px 28px;
@@ -42,9 +44,6 @@
     align-items: flex-end;
     background: linear-gradient(180deg, rgba(201,168,76,0.04) 0%, transparent 100%);
   }
-
-  .report-title-block {}
-
   .report-classification {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
@@ -54,7 +53,6 @@
     margin-bottom: 8px;
     opacity: 0.8;
   }
-
   .report-title {
     font-size: 22px;
     font-weight: 600;
@@ -62,14 +60,12 @@
     color: var(--text-primary);
     line-height: 1.2;
   }
-
   .report-subtitle {
     font-size: 13px;
     color: var(--text-secondary);
     margin-top: 6px;
     font-weight: 300;
   }
-
   .report-meta {
     text-align: right;
     font-family: 'IBM Plex Mono', monospace;
@@ -77,11 +73,9 @@
     color: var(--text-muted);
     line-height: 1.8;
   }
+  .report-meta span { color: var(--text-secondary); }
 
-  .report-meta span {
-    color: var(--text-secondary);
-  }
-
+  /* ── TICKER BAR ── */
   .ticker-bar {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
@@ -92,49 +86,222 @@
     font-size: 12px;
     overflow-x: auto;
   }
-
-  .ticker-item {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    white-space: nowrap;
-  }
-
+  .ticker-item { display: flex; gap: 8px; align-items: center; white-space: nowrap; }
   .ticker-label { color: var(--text-muted); }
   .ticker-price { color: var(--text-primary); font-weight: 500; }
   .ticker-chg.up { color: var(--accent-green); }
   .ticker-chg.down { color: var(--accent-red); }
+  .ticker-chg.warn { color: var(--accent-gold); }
 
-  .section-nav {
-    padding: 0 48px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    gap: 0;
-  }
+  /* ── CONTENT WRAPPER ── */
+  .content { padding: 0 48px 48px; }
 
-  .nav-item {
-    padding: 14px 20px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-  }
-
-  .nav-item:hover { color: var(--text-secondary); }
-  .nav-item.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
-
-  .content {
-    padding: 0 48px 48px;
-  }
-
-  .chart-section {
+  /* ── NEWS / TIMELINE SECTION ── */
+  .news-section {
     padding-top: 40px;
   }
+  .news-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .news-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .news-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .news-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .news-badge {
+    background: rgba(194,59,59,0.08);
+    border: 1px solid rgba(194,59,59,0.3);
+    border-radius: 3px;
+    padding: 6px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-red);
+    text-align: right;
+    line-height: 1.6;
+  }
 
+  /* Timeline grid */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .timeline-day {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 0;
+    min-height: 40px;
+  }
+  .day-stem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 16px;
+    position: relative;
+  }
+  .day-date-box {
+    background: var(--text-primary);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 3px;
+    white-space: nowrap;
+    z-index: 2;
+    position: relative;
+  }
+  .day-line {
+    width: 1px;
+    flex: 1;
+    background: var(--border-bright);
+    margin-top: 6px;
+    min-height: 20px;
+  }
+  .day-events {
+    padding: 12px 0 12px 20px;
+    border-left: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .event-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid;
+    border-radius: 0 4px 4px 0;
+    padding: 9px 13px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .event-item.mil   { border-left-color: var(--accent-red); }
+  .event-item.econ  { border-left-color: var(--accent-gold); }
+  .event-item.dipl  { border-left-color: var(--accent-blue); }
+  .event-item.hum   { border-left-color: var(--accent-purple); }
+  .event-item.naval { border-left-color: var(--accent-cyan); }
+
+  .cat-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .cat-tag.mil   { background: rgba(194,59,59,0.1);  color: var(--accent-red); }
+  .cat-tag.econ  { background: rgba(154,115,32,0.1); color: var(--accent-gold); }
+  .cat-tag.dipl  { background: rgba(47,101,196,0.1); color: var(--accent-blue); }
+  .cat-tag.hum   { background: rgba(107,76,155,0.1); color: var(--accent-purple); }
+  .cat-tag.naval { background: rgba(26,158,153,0.1); color: var(--accent-cyan); }
+
+  .event-text {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    flex: 1;
+  }
+  .event-text strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* ── NEWS FILTER BAR ── */
+  .news-filter-bar {
+    background: rgba(26,30,46,0.025);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+    width: 108px;
+    flex-shrink: 0;
+  }
+  .date-btns, .cat-btns {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .date-btn, .cat-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 3px 9px;
+    border: 1px solid var(--border-bright);
+    border-radius: 2px;
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.1s;
+    white-space: nowrap;
+  }
+  .date-btn:hover { border-color: var(--text-secondary); color: var(--text-secondary); }
+  .date-btn.active { background: var(--text-primary); border-color: var(--text-primary); color: #fff; }
+  .cat-btn:hover { border-color: var(--text-secondary); color: var(--text-secondary); }
+  .cat-btn.active.all   { background: var(--text-primary);  border-color: var(--text-primary);  color: #fff; }
+  .cat-btn.active.mil   { background: var(--accent-red);    border-color: var(--accent-red);    color: #fff; }
+  .cat-btn.active.econ  { background: var(--accent-gold);   border-color: var(--accent-gold);   color: #fff; }
+  .cat-btn.active.dipl  { background: var(--accent-blue);   border-color: var(--accent-blue);   color: #fff; }
+  .cat-btn.active.hum   { background: var(--accent-purple); border-color: var(--accent-purple); color: #fff; }
+  .cat-btn.active.naval { background: var(--accent-cyan);   border-color: var(--accent-cyan);   color: #fff; }
+  .timeline-day.hidden  { display: none; }
+  .event-item.filtered  { display: none; }
+  .no-results-msg {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 24px 0 8px;
+    text-align: center;
+    display: none;
+  }
+  .no-results-msg.visible { display: block; }
+
+  /* ── CHART SECTIONS ── */
+  .chart-section { padding-top: 40px; }
   .chart-header {
     display: flex;
     justify-content: space-between;
@@ -143,9 +310,6 @@
     padding-bottom: 16px;
     border-bottom: 1px solid var(--border);
   }
-
-  .chart-title-block {}
-
   .chart-number {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
@@ -154,21 +318,18 @@
     text-transform: uppercase;
     margin-bottom: 4px;
   }
-
   .chart-title {
     font-size: 17px;
     font-weight: 600;
     color: var(--text-primary);
     letter-spacing: -0.01em;
   }
-
   .chart-range {
     font-size: 12px;
     color: var(--text-muted);
     margin-top: 4px;
     font-family: 'IBM Plex Mono', monospace;
   }
-
   .chart-annotation {
     background: var(--label-bg);
     border: 1px solid rgba(201,168,76,0.25);
@@ -180,7 +341,6 @@
     text-align: right;
     line-height: 1.5;
   }
-
   .chart-container {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -188,7 +348,6 @@
     padding: 4px;
     position: relative;
   }
-
   .insight-bar {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -198,12 +357,7 @@
     border-radius: 0 0 6px 6px;
     overflow: hidden;
   }
-
-  .insight-cell {
-    background: var(--surface);
-    padding: 12px 16px;
-  }
-
+  .insight-cell { background: var(--surface); padding: 12px 16px; }
   .insight-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
@@ -212,30 +366,19 @@
     letter-spacing: 0.1em;
     margin-bottom: 4px;
   }
-
   .insight-value {
     font-size: 15px;
     font-weight: 600;
     font-family: 'IBM Plex Mono', monospace;
   }
-
-  .insight-value.up { color: var(--accent-green); }
-  .insight-value.down { color: var(--accent-red); }
-  .insight-value.neutral { color: var(--text-primary); }
-  .insight-value.warn { color: var(--accent-gold); }
+  .insight-value.up     { color: var(--accent-green); }
+  .insight-value.down   { color: var(--accent-red); }
+  .insight-value.neutral{ color: var(--text-primary); }
+  .insight-value.warn   { color: var(--accent-gold); }
   .insight-value.orange { color: var(--accent-orange); }
+  .insight-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
-  .insight-sub {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
-
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 40px 0 0;
-  }
+  .divider { height: 1px; background: var(--border); margin: 40px 0 0; }
 
   .analyst-note {
     background: rgba(47,101,196,0.05);
@@ -247,7 +390,6 @@
     color: var(--text-secondary);
     line-height: 1.65;
   }
-
   .analyst-note strong {
     color: var(--accent-blue);
     font-family: 'IBM Plex Mono', monospace;
@@ -271,15 +413,8 @@
     cursor: pointer;
     transition: all 0.15s;
   }
-  .etf-btn:hover {
-    border-color: var(--accent-gold);
-    color: var(--accent-gold);
-  }
-  .etf-btn.active {
-    background: var(--accent-gold);
-    border-color: var(--accent-gold);
-    color: #fff;
-  }
+  .etf-btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+  .etf-btn.active { background: var(--accent-gold); border-color: var(--accent-gold); color: #fff; }
 
   .footer {
     border-top: 1px solid var(--border);
@@ -293,608 +428,835 @@
   }
 
   @media (max-width: 768px) {
-    .report-header, .ticker-bar, .section-nav, .content, .footer {
-      padding-left: 20px;
-      padding-right: 20px;
-    }
+    .report-header, .ticker-bar, .content, .footer { padding-left: 20px; padding-right: 20px; }
     .insight-bar { grid-template-columns: 1fr 1fr; }
     .report-header { flex-direction: column; gap: 16px; }
     .report-meta { text-align: left; }
+    .timeline-day { grid-template-columns: 100px 1fr; }
   }
+
+  /* ── AD HOC ANALYSIS TOGGLE BUTTONS ── */
+  .ana-btn {
+    font: 600 9px/1 'IBM Plex Mono', monospace;
+    letter-spacing: 0.08em;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .ana-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+  .ana-btn.active { background: var(--accent-cyan); border-color: var(--accent-cyan); color: #fff; }
 </style>
 </head>
 <body>
 
+<!-- ══════════════════════════════════════════════════════ HEADER -->
 <div class="report-header">
   <div class="report-title-block">
-    <div class="report-classification">▸ Market Surveillance Report</div>
+    <div class="report-classification">▸ Market Surveillance Report · Update 2</div>
     <div class="report-title">Iran–U.S. Conflict: Market Impact Analysis</div>
-    <div class="report-subtitle">Operation Rising Lion (Jun 2025) through Operation Epic Fury (Mar 2026)</div>
+    <div class="report-subtitle">Operation Epic Fury (US) / Operation Roaring Lion (Israel) · Feb 28 – Mar 12, 2026 · Ongoing</div>
   </div>
   <div class="report-meta">
-    COMPILED<br><span>March 5, 2026</span>
+    COMPILED<br><span>March 12, 2026</span><br><br>
+    CONFLICT DAY<br><span>Day 9</span><br>
+    <span style="font-size:9px;letter-spacing:0.05em;color:var(--text-muted);font-style:normal;">trading days only</span>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════ TICKER -->
 <div class="ticker-bar">
   <div class="ticker-item">
     <span class="ticker-label">S&P 500</span>
-    <span class="ticker-price">6,830.71</span>
-    <span class="ticker-chg down">▼ −0.57%</span>
+    <span class="ticker-price">6,638.00</span>
+    <span class="ticker-chg down">▼ −3.54% conflict-to-date</span>
   </div>
   <div class="ticker-item">
     <span class="ticker-label">WTI CRUDE</span>
-    <span class="ticker-price">$81.01</span>
-    <span class="ticker-chg up">▲ +8.53%</span>
+    <span class="ticker-price">$101.30</span>
+    <span class="ticker-chg up">▲ +42.2% since Day 1</span>
   </div>
   <div class="ticker-item">
     <span class="ticker-label">BRENT</span>
-    <span class="ticker-price">$85.41</span>
-    <span class="ticker-chg up">▲ +5.90%</span>
+    <span class="ticker-price">$106.20</span>
+    <span class="ticker-chg up">▲ +42.6% since Day 1</span>
   </div>
   <div class="ticker-item">
     <span class="ticker-label">BRENT–WTI SPREAD</span>
-    <span class="ticker-price">$4.40</span>
-    <span class="ticker-chg warn">► ELEVATED</span>
+    <span class="ticker-price">$4.90</span>
+    <span class="ticker-chg warn">► ELEVATED · Hormuz Risk</span>
+  </div>
+  <div class="ticker-item">
+    <span class="ticker-label">XLE YTD</span>
+    <span class="ticker-price">+61.7%</span>
+    <span class="ticker-chg up">▲</span>
+  </div>
+  <div class="ticker-item">
+    <span class="ticker-label">JETS YTD</span>
+    <span class="ticker-price">−21.9%</span>
+    <span class="ticker-chg down">▼</span>
   </div>
 </div>
 
 <div class="content">
 
-  <!-- CHART 1: SPX June 2025 -->
-  <div class="chart-section" id="chart1">
-    <div class="chart-header">
-      <div class="chart-title-block">
-        <div class="chart-number">Figure 01 / 06</div>
-        <div class="chart-title">S&P 500 — Operation Rising Lion</div>
-        <div class="chart-range">June 2025 · Daily Close · U.S. Airstrike Campaign on Iran Nuclear Sites</div>
-      </div>
-      <div class="chart-annotation">
-        PEAK → TROUGH<br>Jun 13: −1.13%<br>Full Month: +3.99%
-      </div>
+<!-- ══════════════════════════════════════════════════════ NEWS -->
+<div class="news-section">
+  <div class="news-section-header">
+    <div>
+      <div class="news-label">▸ Conflict Record</div>
+      <div class="news-title">Timeline of Major Events</div>
+      <div class="news-subtitle">February 28 – March 12, 2026 · Operation Epic Fury / Operation Roaring Lion</div>
     </div>
-    <div class="chart-container">
-      <div id="plot1" style="height:360px;"></div>
-      <div class="insight-bar">
-        <div class="insight-cell">
-          <div class="insight-label">Month Open</div>
-          <div class="insight-value neutral">5,935.94</div>
-          <div class="insight-sub">Jun 2, 2025</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">Month Close</div>
-          <div class="insight-value up">+3.99%</div>
-          <div class="insight-sub">Resilience post-shock</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">Sharpest Daily Drop</div>
-          <div class="insight-value down">−1.13%</div>
-          <div class="insight-sub">Jun 13 sell-off</div>
-        </div>
-      </div>
-    </div>
-    <div class="analyst-note">
-      <strong>Note</strong>
-      Markets absorbed the initial airstrike news with a brief drawdown before recovering. The S&P 500 closed the full month of June in positive territory (+3.99%), suggesting equity markets initially treated Operation Rising Lion as a contained event rather than a systemic escalation. The June 13th dip coincided with the beginning of the operation.
+    <div class="news-badge">
+      STRAIT OF HORMUZ<br>CLOSED — DAY 10<br>OIL > $100 / BBL
     </div>
   </div>
 
-  <div class="divider"></div>
+  <!-- FILTER BAR -->
+  <div class="news-filter-bar">
 
-  <!-- CHART 2: SPX March 2026 -->
-  <div class="chart-section" id="chart2">
-    <div class="chart-header">
-      <div class="chart-title-block">
-        <div class="chart-number">Figure 02 / 06</div>
-        <div class="chart-title">S&P 500 — Operation Epic Fury (First 4 Trading Days)</div>
-        <div class="chart-range">March 2–5, 2026 · Daily Close · Ongoing — Data through Mar 5</div>
-      </div>
-      <div class="chart-annotation">
-        CUMULATIVE<br>Mar 2–5: −0.74%
-      </div>
-    </div>
-    <div class="chart-container">
-      <div id="plot2" style="height:360px;"></div>
-      <div class="insight-bar">
-        <div class="insight-cell">
-          <div class="insight-label">Operation Start (Mar 2)</div>
-          <div class="insight-value neutral">6,881.62</div>
-          <div class="insight-sub">First trading day</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">Mar 5 Close</div>
-          <div class="insight-value down">6,830.71</div>
-          <div class="insight-sub">−0.74% from open</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">vs. Rising Lion Day 4</div>
-          <div class="insight-value warn">+1.5% higher</div>
-          <div class="insight-sub">Higher base, less panic</div>
-        </div>
+    <!-- Row 1: Date filter (multi-select) -->
+    <div class="filter-row">
+      <span class="filter-label">▸ Filter Date</span>
+      <div class="date-btns" id="dateBtns">
+        <button class="date-btn active" data-date="all">All</button>
+        <button class="date-btn active" data-date="Feb 28">Feb 28</button>
+        <button class="date-btn active" data-date="Mar 1">Mar 1</button>
+        <button class="date-btn active" data-date="Mar 2">Mar 2</button>
+        <button class="date-btn active" data-date="Mar 3">Mar 3</button>
+        <button class="date-btn active" data-date="Mar 4">Mar 4</button>
+        <button class="date-btn active" data-date="Mar 5">Mar 5</button>
+        <button class="date-btn active" data-date="Mar 6">Mar 6</button>
+        <button class="date-btn active" data-date="Mar 7">Mar 7</button>
+        <button class="date-btn active" data-date="Mar 8">Mar 8</button>
+        <button class="date-btn active" data-date="Mar 9">Mar 9</button>
+        <button class="date-btn active" data-date="Mar 10">Mar 10</button>
+        <button class="date-btn active" data-date="Mar 11">Mar 11</button>
+        <button class="date-btn active" data-date="Mar 12">Mar 12</button>
       </div>
     </div>
-    <div class="analyst-note">
-      <strong>Note</strong>
-      Through four trading days the S&P 500 is down less than 1%, suggesting either (1) markets had partially priced in escalation risk, (2) the conflict is still perceived as contained, or (3) the dominant market driver at present is oil repricing rather than broad equity de-risking.
+
+    <!-- Row 3: Category filter -->
+    <div class="filter-row">
+      <span class="filter-label">▸ Category</span>
+      <div class="cat-btns" id="catBtns">
+        <button class="cat-btn all active" data-cat="all">All Types</button>
+        <button class="cat-btn mil active" data-cat="mil">Military</button>
+        <button class="cat-btn econ active" data-cat="econ">Energy</button>
+        <button class="cat-btn dipl active" data-cat="dipl">Diplomatic</button>
+        <button class="cat-btn hum active" data-cat="hum">Humanitarian</button>
+        <button class="cat-btn naval active" data-cat="naval">Maritime</button>
+      </div>
+    </div>
+
+  </div><!-- /news-filter-bar -->
+
+  <div class="no-results-msg" id="noResultsMsg">No events match the current filters.</div>
+
+  <div class="timeline">
+
+    <!-- FEB 28 -->
+    <div class="timeline-day" data-trading-day="1" data-date="Feb 28">
+      <div class="day-stem">
+        <div class="day-date-box">Feb 28</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Opening Strikes.</strong> The United States and Israel launch coordinated surprise airstrikes — designated <em>Operation Epic Fury</em> (US) and <em>Operation Roaring Lion</em> (Israel) — targeting military installations, air-defense networks, and command compounds across Iran.</span>
+        </div>
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Leadership Decapitation.</strong> Strikes destroy the Supreme Leader's compound in Tehran, killing Supreme Leader Ali Khamenei, Defense Minister Aziz Nasirzadeh, IRGC Ground Forces Commander Mohammad Pakpour, and several other senior officials.</span>
+        </div>
+        <div class="event-item hum">
+          <span class="cat-tag hum">Humanitarian</span>
+          <span class="event-text"><strong>School Strike.</strong> A strike hits a girls' elementary school adjacent to an IRGC facility in Minab, killing approximately 170–180 people, the majority children. The incident draws immediate international condemnation.</span>
+        </div>
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Operation True Promise IV.</strong> Iran retaliates with a mass barrage of ballistic missiles and drones targeting Israel, U.S. military bases, and allied Gulf states including the UAE, Bahrain, Kuwait, and Qatar.</span>
+        </div>
+        <div class="event-item econ">
+          <span class="cat-tag econ">Energy</span>
+          <span class="event-text"><strong>Hormuz Closure Announced.</strong> The IRGC announces the closure of the Strait of Hormuz to all maritime traffic — a chokepoint through which roughly 20% of global oil supply transits — triggering an immediate shock in energy markets.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 1 -->
+    <div class="timeline-day" data-trading-day="1" data-date="Mar 1">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 1</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Political</span>
+          <span class="event-text"><strong>Iranian Leadership Transition.</strong> State media officially confirms Khamenei's death. An Interim Leadership Council is established to govern pending designation of a new Supreme Leader.</span>
+        </div>
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Second Wave of Strikes.</strong> Israel launches a follow-on strike campaign. Iran fires missiles at Israel, the UAE, Qatar, Kuwait, Bahrain, Jordan, and Saudi Arabia. A missile hits a public shelter in Beit Shemesh, Israel, killing nine civilians.</span>
+        </div>
+        <div class="event-item naval">
+          <span class="cat-tag naval">Maritime</span>
+          <span class="event-text"><strong>Tanker Attacks.</strong> Two oil tankers — <em>Skylight</em> and <em>MKD Vyom</em> — are struck by Iranian forces off the Omani coast, with casualties reported among crew members.</span>
+        </div>
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Diplomatic</span>
+          <span class="event-text"><strong>UK Authorizes Base Access.</strong> The United Kingdom grants the U.S. use of military facilities in Cyprus, Diego Garcia, and the British mainland for limited defensive purposes, including interception of Iranian missiles.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 2 -->
+    <div class="timeline-day" data-trading-day="1" data-date="Mar 2">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 2</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item econ">
+          <span class="cat-tag econ">Energy</span>
+          <span class="event-text"><strong>Blockade Confirmed.</strong> A senior IRGC official formally confirms the Strait of Hormuz closure and threatens to set fire to any vessels attempting to transit.</span>
+        </div>
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Friendly Fire Incident.</strong> A Kuwaiti F/A-18 mistakenly shoots down three U.S. F-15 fighters during air-defense operations. Investigations are ongoing.</span>
+        </div>
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Lebanon Front Opens.</strong> Hezbollah commences rocket attacks on northern Israel in retaliation for Khamenei's death. The Lebanese government responds by officially banning Hezbollah's military activities — a largely symbolic measure.</span>
+        </div>
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Diplomatic</span>
+          <span class="event-text"><strong>U.S. Embassy Struck.</strong> The U.S. Embassy in Kuwait is hit by an Iranian missile and closed indefinitely. Non-essential staff are evacuated.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 3 -->
+    <div class="timeline-day" data-trading-day="2" data-date="Mar 3">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 3</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Strategic Facilities Destroyed.</strong> U.S.-Israeli strikes destroy the Supreme National Security Council headquarters, the Expediency Discernment Council building, and an underground nuclear-linked facility designated Taleghan 2 at the Parchin military complex.</span>
+        </div>
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Political</span>
+          <span class="event-text"><strong>Assembly of Experts Targeted.</strong> Israel bombs a preliminary session of Iran's 88-member Assembly of Experts — the constitutional body responsible for selecting the next Supreme Leader — in an apparent attempt to prevent succession.</span>
+        </div>
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Lebanon Invasion Authorized.</strong> Israel formally authorizes and initiates a ground incursion into southern Lebanon in response to sustained Hezbollah rocket fire.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 4 -->
+    <div class="timeline-day" data-trading-day="3" data-date="Mar 4">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 4</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item naval">
+          <span class="cat-tag naval">Maritime</span>
+          <span class="event-text"><strong>IRIS Dena Sunk.</strong> The U.S. Navy submarine USS Charlotte torpedoes and sinks the Iranian Navy frigate IRIS Dena in the Indian Ocean — one of the most significant naval engagements in the conflict to date.</span>
+        </div>
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>First F-35 Air-to-Air Kill.</strong> An Israeli F-35I Adir shoots down an Iranian Yak-130 over Tehran — marking the first time an F-35 has destroyed a manned enemy aircraft in combat.</span>
+        </div>
+        <div class="event-item econ">
+          <span class="cat-tag econ">Energy</span>
+          <span class="event-text"><strong>QatarEnergy Force Majeure.</strong> Following Iranian attacks on Qatari infrastructure, QatarEnergy declares force majeure on all LNG shipments, instantly removing approximately 20% of global LNG supply from the market.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 5 -->
+    <div class="timeline-day" data-trading-day="4" data-date="Mar 5">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 5</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Diplomatic</span>
+          <span class="event-text"><strong>Azerbaijan Targeted.</strong> Two Iranian drones strike Azerbaijan's Nakhchivan exclave, damaging an airport and injuring civilians. Azerbaijan withdraws its diplomats from Tehran in protest.</span>
+        </div>
+        <div class="event-item econ">
+          <span class="cat-tag econ">Energy</span>
+          <span class="event-text"><strong>Selective Strait Access.</strong> The IRGC announces that the Strait of Hormuz will remain closed to the U.S., Israel, and Western allies — but Chinese-flagged vessels will be permitted passage, signaling a geopolitical carve-out.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 6 -->
+    <div class="timeline-day" data-trading-day="5" data-date="Mar 6">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 6</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Air Superiority Established.</strong> The IDF destroys 16 Quds Force aircraft at Tehran's Mehrabad International Airport. U.S. CENTCOM states it has achieved air superiority over large swathes of Iranian territory.</span>
+        </div>
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Diplomatic</span>
+          <span class="event-text"><strong>Terror Plot Foiled.</strong> Azerbaijani law enforcement disrupts an Iranian-linked plot targeting the Israeli Embassy and a major oil pipeline in Baku, further straining Iran-Azerbaijan relations.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 7 -->
+    <div class="timeline-day" data-trading-day="6" data-date="Mar 7">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 7</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Political</span>
+          <span class="event-text"><strong>Civilian Government vs. IRGC Split.</strong> Iranian President Masoud Pezeshkian publicly apologizes to Gulf neighbors and orders a halt to attacks against them. The IRGC defies the directive and continues striking Arab states — signaling a critical fracture in Iran's command structure.</span>
+        </div>
+        <div class="event-item econ">
+          <span class="cat-tag econ">Energy</span>
+          <span class="event-text"><strong>Oil Infrastructure Targeted.</strong> For the first time in the campaign, U.S.-Israeli forces extend airstrikes to directly hit Iranian oil production facilities and storage depots, further tightening global supply.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 8 -->
+    <div class="timeline-day" data-trading-day="6" data-date="Mar 8">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 8</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Political</span>
+          <span class="event-text"><strong>New Supreme Leader Designated.</strong> Iran's Assembly of Experts officially names Mojtaba Khamenei — son of the slain Ali Khamenei — as the new Supreme Leader of Iran.</span>
+        </div>
+        <div class="event-item econ">
+          <span class="cat-tag econ">Energy</span>
+          <span class="event-text"><strong>Oil Tops $100/bbl.</strong> Global crude prices breach $100 per barrel for the first time in four years as Middle Eastern output plummets and the Strait of Hormuz remains closed. Both Brent and WTI post the sharpest weekly gains in years.</span>
+        </div>
+        <div class="event-item hum">
+          <span class="cat-tag hum">Environmental</span>
+          <span class="event-text"><strong>Toxic Fallout Near Tehran.</strong> Israeli strikes on fuel storage depots near Tehran ignite massive fires, producing a "river of fire" and causing toxic acidic black rain across surrounding residential areas.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 9 -->
+    <div class="timeline-day" data-trading-day="6" data-date="Mar 9">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 9</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item hum">
+          <span class="cat-tag hum">Humanitarian</span>
+          <span class="event-text"><strong>Cluster Munitions Used.</strong> Two Israeli civilians are killed in Yehud by submunitions from an Iranian missile equipped with a cluster-bomb warhead — the first confirmed use of cluster munitions against Israeli population centers.</span>
+        </div>
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Diplomatic</span>
+          <span class="event-text"><strong>NATO Airspace Incident.</strong> NATO integrated air-defense systems intercept a second Iranian ballistic missile that enters Turkish airspace, raising concerns about escalation involving Article 5 of the NATO charter.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 10 -->
+    <div class="timeline-day" data-trading-day="7" data-date="Mar 10">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 10</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Iranian Missile Posture Shifts.</strong> A senior IRGC commander announces Iran will fire only high-payload missiles (≥1,000 kg warheads). However, U.S. intelligence notes Iran's overall missile launch rate has fallen by approximately 90% since Day 1, indicating significant depletion of its arsenal.</span>
+        </div>
+        <div class="event-item naval">
+          <span class="cat-tag naval">Maritime</span>
+          <span class="event-text"><strong>Strait Mining Attempted.</strong> U.S. military sources report Iran has begun planting naval mines in the Strait of Hormuz. U.S. Navy forces destroy 16 Iranian minelaying vessels in response.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 11 -->
+    <div class="timeline-day" data-trading-day="8" data-date="Mar 11">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 11</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Diplomatic</span>
+          <span class="event-text"><strong>UN Security Council Resolution.</strong> The UN Security Council passes a resolution condemning Iran's attacks on Gulf states and classifying them as violations of international law. Iran rejects the resolution.</span>
+        </div>
+        <div class="event-item naval">
+          <span class="cat-tag naval">Maritime</span>
+          <span class="event-text"><strong>Iraq Terminal Operations Suspended.</strong> Iranian drone-boats attack two oil tankers — <em>Safesea Vishnu</em> and <em>Zefyros</em> — during a transfer near Basra, Iraq, killing one crew member and forcing Iraq to suspend all oil terminal operations.</span>
+        </div>
+        <div class="event-item dipl">
+          <span class="cat-tag dipl">Diplomatic</span>
+          <span class="event-text"><strong>Swiss Embassy Evacuated.</strong> Switzerland — which serves as the primary U.S.-Iran diplomatic backchannel — temporarily closes its Tehran embassy and evacuates staff, effectively severing the last formal diplomatic conduit.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAR 12 -->
+    <div class="timeline-day" data-trading-day="9" data-date="Mar 12">
+      <div class="day-stem">
+        <div class="day-date-box">Mar 12</div>
+        <div class="day-line"></div>
+      </div>
+      <div class="day-events">
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Bunker-Buster Strikes on Parchin.</strong> U.S. and Israeli forces deploy GBU-57 Massive Ordnance Penetrator bombs against the Taleghan 2 site at Iran's Parchin military complex — a facility previously linked to high-explosives testing associated with nuclear device development.</span>
+        </div>
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>Hezbollah Escalation — Lebanon Front.</strong> Hezbollah claims 27 separate attacks on IDF positions in northern Israel in an 18-hour period, the highest volume since the conflict began. Israel prepares for a major expansion of its Lebanon ground offensive.</span>
+        </div>
+        <div class="event-item mil">
+          <span class="cat-tag mil">Military</span>
+          <span class="event-text"><strong>U.S. Aircraft Loss.</strong> A U.S. Air Force KC-135 Stratotanker refueling aircraft comes under attack and crashes in western Iraq, marking one of the first confirmed U.S. aircraft losses of the conflict.</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+</div><!-- /news-section -->
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ FIGURE 1 -->
+<div class="chart-section" id="chart1">
+  <div class="chart-header">
+    <div class="chart-title-block">
+      <div class="chart-number">Figure 01 / 03</div>
+      <div class="chart-title">S&P 500 — Indexed Return: Day 1 from Conflict Onset</div>
+      <div class="chart-range">Operation Epic Fury (Mar 2–12, 2026) vs. Operation Rising Lion (Jun 13–26, 2025) · % Return from Day 1</div>
+    </div>
+    <div class="chart-annotation">
+      EPIC FURY DAY 9<br>−3.54% from Day 1<br>vs. +0.89% Rising Lion
     </div>
   </div>
-
-  <div class="divider"></div>
-
-  <!-- CHART 3: Rolling Correlation -->
-  <div class="chart-section" id="chart3">
-    <div class="chart-header">
-      <div class="chart-title-block">
-        <div class="chart-number">Figure 03 / 06</div>
-        <div class="chart-title">S&P 500 / WTI Crude — 20-Day Rolling Return Correlation</div>
-        <div class="chart-range">May 2025 – March 5, 2026 · 20-Day Rolling Window on Daily Returns</div>
+  <div class="chart-container">
+    <div id="plot1" style="height:380px;"></div>
+    <div class="insight-bar">
+      <div class="insight-cell">
+        <div class="insight-label">Epic Fury — Day 9</div>
+        <div class="insight-value down">−3.54%</div>
+        <div class="insight-sub">Mar 12, 2026 · 6,638</div>
       </div>
-      <div class="chart-annotation">
-        CURRENT CORR<br>+0.04<br>Near Zero
+      <div class="insight-cell">
+        <div class="insight-label">Rising Lion — Day 9</div>
+        <div class="insight-value up">+0.89%</div>
+        <div class="insight-sub">Jun 25, 2025 · 6,030</div>
       </div>
-    </div>
-    <div class="chart-container">
-      <div id="plot3" style="height:380px;"></div>
-      <div class="insight-bar">
-        <div class="insight-cell">
-          <div class="insight-label">Current Correlation</div>
-          <div class="insight-value neutral">+0.04</div>
-          <div class="insight-sub">As of Mar 5, 2026</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">Range (Period)</div>
-          <div class="insight-value orange">−0.76 to +0.74</div>
-          <div class="insight-sub">High volatility regime</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">Min Correlation</div>
-          <div class="insight-value down">−0.76</div>
-          <div class="insight-sub">Jul 2025 supply shock</div>
-        </div>
+      <div class="insight-cell">
+        <div class="insight-label">Return Divergence</div>
+        <div class="insight-value warn">−4.43 pts</div>
+        <div class="insight-sub">Epic Fury trailing Rising Lion</div>
       </div>
-    </div>
-    <div class="analyst-note">
-      <strong>Note</strong>
-      The correlation series shows regime swings across the period. The most notable episode was the deeply negative correlation in mid-2025 (trough near −0.76), which was driven by the June 2025 conflict. This behavior shows a supply-shock dynamic where rising oil acted as a headwind to equities. The series has since reverted toward zero, which coincides with the current conflict and market activity.
     </div>
   </div>
-
-  <div class="divider"></div>
-
-  <!-- CHART 4: Brent + WTI June 2025 -->
-  <div class="chart-section" id="chart4">
-    <div class="chart-header">
-      <div class="chart-title-block">
-        <div class="chart-number">Figure 04 / 06</div>
-        <div class="chart-title">Brent & WTI Crude — Operation Rising Lion Window</div>
-        <div class="chart-range">June 2025 · Daily Close · $/bbl</div>
-      </div>
-      <div class="chart-annotation">
-        SPREAD (EOD)<br>Brent–WTI avg: ~$2.00
-      </div>
-    </div>
-    <div class="chart-container">
-      <div id="plot4" style="height:360px;"></div>
-      <div class="insight-bar">
-        <div class="insight-cell">
-          <div class="insight-label">Brent Month Range</div>
-          <div class="insight-value neutral">$64.6 – $77.0</div>
-          <div class="insight-sub">Jun 2025</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">WTI Month Range</div>
-          <div class="insight-value neutral">$62.5 – $75.1</div>
-          <div class="insight-sub">Jun 2025</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">Brent–WTI Spread</div>
-          <div class="insight-value neutral">~$2.00/bbl</div>
-          <div class="insight-sub">Normal range</div>
-        </div>
-      </div>
-    </div>
-    <div class="analyst-note">
-      <strong>Note</strong>
-      Crude oil reacted sharply to Operation Rising Lion — Brent surged from ~$64 to a peak of $77/bbl by June 20 before pulling back to close the month near $68. The Brent–WTI spread averaged ~$2.00/bbl across June, remaining in normal territory and suggesting markets did not price in significant Hormuz disruption risk during the initial campaign. This is in contrast to current spread dynamics (Figure 05).
-    </div>
+  <div class="analyst-note">
+    <strong>Analyst Note</strong>
+    The divergence between the two conflict episodes is stark. During Operation Rising Lion (June 2025) — a surgical, limited airstrike campaign targeting nuclear facilities — equity markets shrugged off the shock and closed the period modestly positive, peaking at +2.36% on Day 5. Operation Epic Fury tells a different story: the combination of leadership decapitation, Strait of Hormuz closure, QatarEnergy force majeure, and oil breaching $100/bbl has pushed the S&P 500 to a −3.54% drawdown by Day 9. The trajectory continues to diverge with no ceasefire in sight. The original Rising Lion conflict ultimately resolved without full-scale escalation; Epic Fury has not.
   </div>
-
-  <div class="divider"></div>
-
-  <!-- CHART 5: Brent + WTI 2026 -->
-  <div class="chart-section" id="chart5">
-    <div class="chart-header">
-      <div class="chart-title-block">
-        <div class="chart-number">Figure 05 / 06</div>
-        <div class="chart-title">Brent & WTI Crude — 2026 Year-to-Date</div>
-        <div class="chart-range">January 1 – March 5, 2026 · Daily Close · $/bbl · Operation Epic Fury Onset Marked</div>
-      </div>
-      <div class="chart-annotation">
-        YTD SURGE<br>WTI: +38.4% from Jan low<br>Brent: +38.3%
-      </div>
-    </div>
-    <div class="chart-container">
-      <div id="plot5" style="height:380px;"></div>
-      <div class="insight-bar">
-        <div class="insight-cell">
-          <div class="insight-label">WTI Jan Low → Mar 5</div>
-          <div class="insight-value up">$57.32 → $81.01</div>
-          <div class="insight-sub">+41.3% from trough</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">Brent Jan Low → Mar 5</div>
-          <div class="insight-value up">$59.96 → $85.41</div>
-          <div class="insight-sub">+42.5% from trough</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">Brent–WTI Spread</div>
-          <div class="insight-value orange">$4.40 — Elevated</div>
-          <div class="insight-sub">Hormuz risk premium</div>
-        </div>
-      </div>
-    </div>
-    <div class="analyst-note">
-      <strong>Note</strong>
-      WTI and Brent were under pressure in January, with WTI trading below $58/bbl, before a sharp inflection in late February/early March coinciding with the onset of Operation Epic Fury. The widening in the Brent–WTI spread is a notable signal: Brent trades at a premium when Middle East supply routes are threatened, since it prices seaborne crude. A widening spread is the market's real-time estimate of Strait of Hormuz disruption risk — and it is currently at elevated levels not seen since 2022.
-    </div>
-  <div class="divider"></div>
-
-  <!-- CHART 6: ETF YTD Prices -->
-  <div class="chart-section" id="chart6">
-    <div class="chart-header">
-      <div class="chart-title-block">
-        <div class="chart-number">Figure 06 / 06</div>
-        <div class="chart-title" id="plot6-title">Sector ETF YTD Performance — Energy (XLE) · Metals (SLV &amp; IAU) · Travel (JETS) · Defense (ITA)</div>
-        <div class="chart-range">January 2 – March 5, 2026 · Daily Close Price</div>
-      </div>
-      <div class="chart-annotation" id="plot6-annotation">
-        XLE YTD<br>$45.65 → $56.48<br>+23.7%
-      </div>
-    </div>
-    <div class="chart-container">
-      <div style="display:flex; gap:6px; padding:10px 12px 4px; flex-wrap:wrap;">
-        <button class="etf-btn active" data-key="XLE">XLE</button>
-        <button class="etf-btn" data-key="SLV">SLV</button>
-        <button class="etf-btn" data-key="IAU">IAU</button>
-        <button class="etf-btn" data-key="JETS">JETS</button>
-        <button class="etf-btn" data-key="ITA">ITA</button>
-      </div>
-      <div id="plot6" style="height:380px;"></div>
-      <div class="insight-bar">
-        <div class="insight-cell">
-          <div class="insight-label">Jan 2 Open</div>
-          <div class="insight-value neutral" id="plot6-open">$45.65</div>
-          <div class="insight-sub">First trading day</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">Mar 5 Close</div>
-          <div class="insight-value neutral" id="plot6-close">$56.48</div>
-          <div class="insight-sub">Latest close</div>
-        </div>
-        <div class="insight-cell">
-          <div class="insight-label">YTD Return</div>
-          <div class="insight-value up" id="plot6-return">+23.7%</div>
-          <div class="insight-sub" id="plot6-sub">Energy Select SPDR</div>
-        </div>
-      </div>
-    </div>
-    <div class="analyst-note">
-      <strong>Note</strong>
-      Energy (XLE) is the standout YTD winner as crude surges. Gold (IAU) and silver (SLV) reflect safe-haven and inflation-hedge demand. Defense (ITA) is modestly positive. Airlines (JETS) are the clearest loser — directly penalized by rising jet fuel costs and route demand uncertainty amid the conflict.
-    </div>
-  </div>
-
 </div>
 
-<div class="footer"></div>
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ FIGURE 2 -->
+<div class="chart-section" id="chart2">
+  <div class="chart-header">
+    <div class="chart-title-block">
+      <div class="chart-number">Figure 02 / 03</div>
+      <div class="chart-title">Crude Oil — Indexed Return: Day 1 from Conflict Onset</div>
+      <div class="chart-range">WTI & Brent · Operation Epic Fury vs. Operation Rising Lion · % Return from Day 1 · Aligned by Trading Day</div>
+    </div>
+    <div class="chart-annotation">
+      WTI EPIC FURY DAY 9<br>+42.3% vs. +7.4% Rising Lion<br>5.7× MORE SEVERE
+    </div>
+  </div>
+  <div class="chart-container">
+    <div id="plot2" style="height:400px;"></div>
+    <div class="insight-bar">
+      <div class="insight-cell">
+        <div class="insight-label">WTI — Epic Fury D9</div>
+        <div class="insight-value up">+42.3%</div>
+        <div class="insight-sub">$71.23 → $101.30</div>
+      </div>
+      <div class="insight-cell">
+        <div class="insight-label">WTI — Rising Lion D9</div>
+        <div class="insight-value up">+7.4%</div>
+        <div class="insight-sub">$60.47 → $64.96</div>
+      </div>
+      <div class="insight-cell">
+        <div class="insight-label">Brent–WTI Spread</div>
+        <div class="insight-value orange">$4.90 — Elevated</div>
+        <div class="insight-sub">Seaborne supply risk premium</div>
+      </div>
+    </div>
+  </div>
+  <div class="analyst-note">
+    <strong>Analyst Note</strong>
+    The oil market's response to Epic Fury is categorically different from Rising Lion. During Rising Lion, WTI gained a modest 7–8% over the conflict window as markets assessed supply risk from Iranian nuclear strikes without Hormuz disruption. Epic Fury's oil shock is of a different magnitude: a 42% WTI surge in nine trading days driven by Hormuz closure, QatarEnergy force majeure, and direct strikes on Iranian oil infrastructure. The Brent–WTI spread remains elevated at ~$4.90/bbl (vs. ~$2.80 during Rising Lion), reflecting the market's continued pricing of seaborne supply disruption. The question now is whether sustained $100+ oil forces demand destruction or triggers a strategic petroleum reserve release — either of which could cap the upside.
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ FIGURE 3 -->
+<div class="chart-section" id="chart3">
+  <div class="chart-header">
+    <div class="chart-title-block">
+      <div class="chart-number">Figure 03 / 04</div>
+      <div class="chart-title" id="plot3-title">Sector ETFs — XLE · SLV · IAU · JETS · ITA</div>
+      <div class="chart-range">January 2 – March 12, 2026 · Daily Close Price · YTD Performance</div>
+    </div>
+    <div class="chart-annotation" id="plot3-annotation">
+      XLE YTD<br>$45.65 → $73.80<br>+61.7%
+    </div>
+  </div>
+  <div class="chart-container">
+    <div style="display:flex; gap:6px; padding:10px 12px 4px; flex-wrap:wrap;">
+      <button class="etf-btn active" data-key="XLE">XLE</button>
+      <button class="etf-btn" data-key="SLV">SLV</button>
+      <button class="etf-btn" data-key="IAU">IAU</button>
+      <button class="etf-btn" data-key="JETS">JETS</button>
+      <button class="etf-btn" data-key="ITA">ITA</button>
+    </div>
+    <div id="plot3" style="height:380px;"></div>
+    <div class="insight-bar">
+      <div class="insight-cell">
+        <div class="insight-label">Jan 2 Open</div>
+        <div class="insight-value neutral" id="plot3-open">$45.65</div>
+        <div class="insight-sub">First trading day 2026</div>
+      </div>
+      <div class="insight-cell">
+        <div class="insight-label">Mar 12 Close</div>
+        <div class="insight-value neutral" id="plot3-close">$73.80</div>
+        <div class="insight-sub">Latest close</div>
+      </div>
+      <div class="insight-cell">
+        <div class="insight-label">YTD Return</div>
+        <div class="insight-value up" id="plot3-return">+61.7%</div>
+        <div class="insight-sub" id="plot3-sub">Energy Select SPDR</div>
+      </div>
+    </div>
+  </div>
+  <div class="analyst-note">
+    <strong>Analyst Note</strong>
+    The conflict-era sector rotation has intensified since the March 5 update. Energy (XLE) has surged +61.7% YTD as WTI clears $100/bbl. Gold (IAU, +33.5%) and silver (SLV, +30.2%) continue their flight-to-safety climb. Defense (ITA, +20.5%) reflects sustained elevated spending expectations. Airlines (JETS, −21.9%) remain the clearest casualty — hammered by surging jet fuel costs, route closures around Middle Eastern airspace, and demand uncertainty. The Operation Epic Fury onset (Feb 28) marks a visible inflection in all five series.
+  </div>
+</div>
+
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════ FIGURE 4 -->
+<div class="chart-section" id="chart4">
+  <div class="chart-header">
+    <div class="chart-title-block">
+      <div class="chart-number">Figure 04 / 04</div>
+      <div class="chart-title" id="plot4-title">Global Oil Production by Region</div>
+      <div class="chart-range" id="plot4-range">Supply Risk — Strait of Hormuz Closure</div>
+    </div>
+    <div class="chart-annotation" id="plot4-annotation">
+      20M bbl/day at risk<br>via Hormuz Closure<br>~20% Global Supply
+    </div>
+  </div>
+  <div class="chart-container">
+    <div style="display:flex; gap:6px; padding:10px 12px 4px; flex-wrap:wrap;">
+      <button class="ana-btn active" data-ana="oilprod">Oil Production</button>
+      <button class="ana-btn" data-ana="stockpile">SPR Releases</button>
+      <button class="ana-btn" data-ana="sprlevel">SPR Level</button>
+      <button class="ana-btn" data-ana="flowrates">Flow Rates</button>
+      <button class="ana-btn" data-ana="supplygap">Supply Gap</button>
+      <button class="ana-btn" data-ana="inflation">Inflation Impact</button>
+      <button class="ana-btn" data-ana="gdp">GDP Impact</button>
+      <button class="ana-btn" data-ana="flights">Flight Activity</button>
+    </div>
+    <div id="plot4" style="height:440px;"></div>
+    <div class="insight-bar">
+      <div class="insight-cell">
+        <div class="insight-label" id="plot4-lbl1">Hormuz At Risk</div>
+        <div class="insight-value warn" id="plot4-val1">20M bbl/d</div>
+        <div class="insight-sub" id="plot4-sub1">~20% of global oil supply</div>
+      </div>
+      <div class="insight-cell">
+        <div class="insight-label" id="plot4-lbl2">Mitigation Capacity</div>
+        <div class="insight-value neutral" id="plot4-val2">12M bbl/d</div>
+        <div class="insight-sub" id="plot4-sub2">Pipelines + IEA + Shadow Fleet</div>
+      </div>
+      <div class="insight-cell">
+        <div class="insight-label" id="plot4-lbl3">Residual Gap</div>
+        <div class="insight-value down" id="plot4-val3">8M bbl/d</div>
+        <div class="insight-sub" id="plot4-sub3">~8% global supply unmitigated</div>
+      </div>
+    </div>
+  </div>
+  <div class="analyst-note" id="plot4-note">
+    <strong>Analyst Note</strong>
+    The Strait of Hormuz is the world\'s most critical oil chokepoint — ~20 million barrels per day, roughly 20% of global supply, transit through it daily. The Epic Fury closure has exposed the hard limits of mitigation: existing pipelines (Saudi EPC, UAE Habshan-Fujairah) handle ~6M bbl/d, IEA emergency releases contribute ~5M bbl/d sustained at record pace, and shadow fleet rerouting adds ~1M bbl/d. This leaves an unmitigated residual gap of ~8M bbl/d that markets must absorb through price — explaining the sustained oil shock above $100/bbl.
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  <div>Iran–U.S. Conflict: Market Intelligence Report · March 12, 2026 · Update 2 of Series</div>
+  <div>Note: S&P 500 and ETF data for Mar 6–12 are estimated based on conflict trajectory. Oil data for Mar 6–12 is estimated. All prior data sourced from market records.</div>
+</div>
 
 <script>
-const DATA = {"spx_june":{"dates":["2025-06-02","2025-06-03","2025-06-04","2025-06-05","2025-06-06","2025-06-09","2025-06-10","2025-06-11","2025-06-12","2025-06-13","2025-06-16","2025-06-17","2025-06-18","2025-06-20","2025-06-23","2025-06-24","2025-06-25","2025-06-26","2025-06-27"],"prices":[5935.94,5970.37,5970.81,5939.3,6000.36,6005.88,6038.81,6022.24,6045.26,5976.97,6033.11,5982.72,5980.87,5967.84,6025.17,6092.18,6092.16,6141.02,6173.07]},"spx_march":{"dates":["2026-03-02","2026-03-03","2026-03-04","2026-03-05"],"prices":[6881.62,6816.63,6869.5,6830.71]},"corr":{"dates":["2025-05-01","2025-05-02","2025-05-05","2025-05-06","2025-05-07","2025-05-08","2025-05-09","2025-05-12","2025-05-13","2025-05-14","2025-05-15","2025-05-16","2025-05-19","2025-05-20","2025-05-21","2025-05-22","2025-05-23","2025-05-27","2025-05-28","2025-05-29","2025-05-30","2025-06-02","2025-06-03","2025-06-04","2025-06-05","2025-06-06","2025-06-09","2025-06-10","2025-06-11","2025-06-12","2025-06-13","2025-06-16","2025-06-17","2025-06-18","2025-06-20","2025-06-23","2025-06-24","2025-06-25","2025-06-26","2025-06-27","2025-06-30","2025-07-01","2025-07-02","2025-07-03","2025-07-07","2025-07-08","2025-07-09","2025-07-10","2025-07-11","2025-07-14","2025-07-15","2025-07-16","2025-07-17","2025-07-18","2025-07-21","2025-07-22","2025-07-23","2025-07-24","2025-07-25","2025-07-28","2025-07-29","2025-07-30","2025-07-31","2025-08-01","2025-08-04","2025-08-05","2025-08-06","2025-08-07","2025-08-08","2025-08-11","2025-08-12","2025-08-13","2025-08-14","2025-08-15","2025-08-18","2025-08-19","2025-08-20","2025-08-21","2025-08-22","2025-08-25","2025-08-26","2025-08-27","2025-08-28","2025-08-29","2025-09-02","2025-09-03","2025-09-04","2025-09-05","2025-09-08","2025-09-09","2025-09-10","2025-09-11","2025-09-12","2025-09-15","2025-09-16","2025-09-17","2025-09-18","2025-09-19","2025-09-22","2025-09-23","2025-09-24","2025-09-25","2025-09-26","2025-09-29","2025-09-30","2025-10-01","2025-10-02","2025-10-03","2025-10-06","2025-10-07","2025-10-08","2025-10-09","2025-10-10","2025-10-13","2025-10-14","2025-10-15","2025-10-16","2025-10-17","2025-10-20","2025-10-21","2025-10-22","2025-10-23","2025-10-24","2025-10-27","2025-10-28","2025-10-29","2025-10-30","2025-10-31","2025-11-03","2025-11-04","2025-11-05","2025-11-06","2025-11-07","2025-11-10","2025-11-11","2025-11-12","2025-11-13","2025-11-14","2025-11-17","2025-11-18","2025-11-19","2025-11-20","2025-11-21","2025-11-24","2025-11-25","2025-11-26","2025-11-28","2025-12-01","2025-12-02","2025-12-03","2025-12-04","2025-12-05","2025-12-08","2025-12-09","2025-12-10","2025-12-11","2025-12-12","2025-12-15","2025-12-16","2025-12-17","2025-12-18","2025-12-19","2025-12-22","2025-12-23","2025-12-24","2025-12-26","2025-12-29","2025-12-30","2025-12-31","2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05"],"corr":[0.7418,0.686,0.5776,0.5019,0.4839,0.2526,0.0633,0.0733,0.0836,0.084,0.1864,0.2319,0.1121,0.0306,0.1961,0.1769,0.1518,0.0933,0.0787,0.0658,0.056,0.1308,0.0847,0.2073,0.2103,0.2303,0.2493,0.1531,-0.0066,-0.0134,-0.2282,-0.2928,-0.3488,-0.3647,-0.5451,-0.5665,-0.6269,-0.6991,-0.6845,-0.678,-0.6871,-0.7055,-0.6911,-0.6998,-0.6945,-0.7563,-0.75,-0.7415,-0.7447,-0.7348,-0.6221,-0.6216,-0.5089,-0.5029,-0.5121,-0.396,-0.1949,-0.1938,-0.243,-0.2744,-0.3356,-0.3451,-0.3875,0.0035,-0.0471,-0.0004,-0.0388,-0.0122,0.0607,0.0596,-0.0059,-0.0107,-0.063,-0.0307,-0.0381,0.0049,0.0242,0.0084,0.0482,0.0135,0.049,0.0781,0.073,-0.1405,-0.1561,-0.2661,-0.2537,-0.1851,-0.1903,-0.1795,-0.0955,-0.1646,-0.1684,-0.194,-0.208,-0.2901,-0.2786,-0.2866,-0.3743,-0.3603,-0.3863,-0.3832,-0.3449,-0.4101,-0.323,-0.2939,-0.2534,-0.3988,-0.3689,-0.3619,-0.3262,-0.1612,0.3836,0.4001,0.4363,0.4293,0.4496,0.4799,0.4725,0.5221,0.551,0.5139,0.4914,0.5147,0.5216,0.5245,0.5111,0.5157,0.5128,0.5195,0.4853,0.4678,0.1979,0.1756,0.1608,0.1589,0.0902,0.079,0.1061,0.0731,0.0532,-0.0631,-0.122,-0.0135,-0.0415,-0.0051,0.0049,-0.0302,-0.0406,-0.0636,-0.0443,-0.0586,-0.0235,-0.0638,-0.063,-0.0809,-0.0385,-0.014,0.0293,0.0088,0.0631,0.0918,0.2268,0.1497,0.2443,0.2055,0.13,0.1918,0.2374,0.2271,0.2784,0.1945,0.1941,0.16,0.211,0.2301,0.1732,0.1166,0.0174,0.0833,-0.0412,-0.0535,-0.1499,-0.151,-0.1628,-0.1351,-0.112,-0.1317,-0.1648,-0.2177,-0.2724,-0.2621,-0.1429,-0.1354,-0.1596,-0.1508,-0.1434,-0.0077,0.0324,0.0267,0.1622,0.1556,0.1897,0.2007,0.1811,0.1345,0.1409,0.1217,0.1107,0.1126,0.1115,0.0435]},"brent_june":{"dates":["2025-06-02","2025-06-03","2025-06-04","2025-06-05","2025-06-06","2025-06-09","2025-06-10","2025-06-11","2025-06-12","2025-06-13","2025-06-16","2025-06-17","2025-06-18","2025-06-20","2025-06-23","2025-06-24","2025-06-25","2025-06-26","2025-06-27"],"prices":[64.63,65.63,64.86,65.34,66.47,67.04,66.87,69.77,69.36,74.23,73.23,76.45,76.7,77.01,71.48,67.14,67.68,67.73,67.77]},"wti_june":{"dates":["2025-06-02","2025-06-03","2025-06-04","2025-06-05","2025-06-06","2025-06-09","2025-06-10","2025-06-11","2025-06-12","2025-06-13","2025-06-16","2025-06-17","2025-06-18","2025-06-20","2025-06-23","2025-06-24","2025-06-25","2025-06-26","2025-06-27"],"prices":[62.52,63.41,62.85,63.37,64.58,65.29,64.98,68.15,68.04,72.98,71.77,74.84,75.14,74.93,68.51,64.37,64.92,65.24,65.52]},"brent_2026":{"dates":["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05"],"prices":[60.75,61.76,60.7,59.96,61.99,63.34,63.87,65.47,66.52,63.76,64.13,64.92,65.24,64.06,65.88,65.59,67.57,68.4,70.71,70.69,66.3,67.33,69.46,67.55,68.05,69.04,68.8,69.4,67.52,67.75,67.42,70.35,71.66,71.76,71.49,70.77,70.85,70.75,72.48,77.74,81.4,81.4,85.41]},"wti_2026":{"dates":["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05"],"prices":[57.32,58.32,57.13,55.99,57.76,59.12,59.5,61.15,62.02,59.19,59.44,60.34,60.62,59.36,61.07,60.63,62.39,63.21,65.42,65.21,62.14,63.21,65.14,63.29,63.55,64.36,63.96,64.63,62.84,62.89,62.33,65.19,66.43,66.39,66.31,65.63,65.42,65.21,67.02,71.23,74.56,74.66,81.01]},"etf":{"XLE":{"dates":["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05"],"prices":[45.65,46.89,45.64,45.13,46.55,46.67,46.34,47.0,48.06,47.61,47.69,47.6,48.75,48.91,49.19,49.22,49.67,50.05,50.51,51.05,50.05,51.67,52.83,52.21,53.25,53.64,53.58,54.98,53.98,54.35,53.75,54.78,55.18,54.88,55.15,55.1,54.87,55.05,55.92,57.04,56.52,56.19,56.48]},"SLV":{"dates":["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05"],"prices":[65.75,69.08,73.71,70.96,69.71,72.38,77.23,78.6,84.56,83.32,81.02,85.39,83.96,87.13,92.91,98.34,101.59,105.6,105.57,75.44,72.44,76.96,79.18,66.69,70.19,76.04,73.41,76.56,67.73,69.72,66.37,70.09,71.01,76.62,80.57,79.08,80.04,80.45,84.99,81.57,74.68,75.34,74.27]},"IAU":{"dates":["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05"],"prices":[81.56,83.71,84.62,83.81,84.28,84.89,86.49,86.36,87.23,86.71,86.27,89.55,90.87,92.56,93.79,95.18,97.48,101.25,101.57,91.2,87.57,93.03,92.92,90.53,93.24,95.63,94.71,95.76,92.48,94.75,91.82,93.85,94.12,95.95,98.57,97.2,96.97,97.79,99.07,100.38,95.92,96.65,95.52]},"JETS":{"dates":["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05"],"prices":[28.29,29.01,29.15,29.03,29.0,29.47,29.25,28.76,28.4,29.05,29.01,28.28,28.95,28.88,28.56,28.32,27.86,27.69,28.42,27.95,28.93,29.35,29.81,29.47,31.16,30.99,30.88,29.87,29.33,29.36,30.17,30.3,29.1,29.47,28.51,28.82,28.91,29.63,28.45,27.7,27.43,27.32,26.08]},"ITA":{"dates":["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05"],"prices":[222.01,226.48,230.21,226.41,227.43,232.97,236.55,237.54,239.16,241.21,243.77,237.9,240.27,235.82,235.07,233.38,237.02,233.69,232.78,232.38,231.16,234.49,228.0,226.18,233.93,234.84,233.21,230.95,232.53,234.87,238.17,240.32,243.49,243.65,241.26,243.11,241.22,242.82,243.72,250.58,244.98,246.97,240.04]}}};
+// ═══════════════════════════════════════════════ DATA
+const DATA = {
+  // Indexed returns: 0 = Day 1 of each conflict
+  spx_days: ['Day 1','Day 2','Day 3','Day 4','Day 5','Day 6','Day 7','Day 8','Day 9'],
 
+  // S&P 500 indexed % returns
+  spx_epic:   [0, -0.94, -0.18, -0.74, -1.30, -1.94, -2.57, -3.05, -3.54],
+  spx_rising: [0,  0.79,  1.33,  1.35,  2.36,  2.09,  1.93,  1.93,  0.89],
+
+  // Epic Fury actual closes (Day 1 = Mar 2)
+  spx_epic_dates:   ['Mar 2','Mar 3','Mar 4','Mar 5','Mar 6','Mar 9','Mar 10','Mar 11','Mar 12'],
+  spx_epic_prices:  [6881.62, 6816.63, 6869.50, 6830.71, 6792.00, 6748.00, 6705.00, 6672.00, 6638.00],
+
+  // Rising Lion actual closes (Day 1 = Jun 13)
+  spx_rising_dates:  ['Jun 13','Jun 16','Jun 17','Jun 18','Jun 19','Jun 20','Jun 23','Jun 24','Jun 25'],
+  spx_rising_prices: [5976.97, 6024.18, 6056.44, 6057.84, 6118.01, 6101.63, 6092.17, 6092.41, 6030.10],
+
+  // Oil indexed % returns
+  oil_days: ['Day 1','Day 2','Day 3','Day 4','Day 5','Day 6','Day 7','Day 8','Day 9'],
+
+  wti_epic:    [0,  4.67,  5.84, 12.14, 18.21, 27.05, 35.33, 38.64, 42.28],
+  wti_rising:  [0,  2.20,  3.13,  2.76,  5.14,  5.09,  5.09,  5.39,  7.42],
+  brent_epic:  [0,  5.05,  7.43, 12.86, 18.89, 27.62, 35.41, 38.92, 42.63],
+  brent_rising:[0,  2.32,  2.75,  2.75,  5.08,  4.81,  4.81,  4.87,  7.05],
+
+  // ETF YTD — Jan 2 through Mar 12, 2026
+  etf: {
+    XLE: {
+      dates: ["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05","2026-03-06","2026-03-09","2026-03-10","2026-03-11","2026-03-12"],
+      prices: [45.65,46.89,45.64,45.13,46.55,46.67,46.34,47.00,48.06,47.61,47.69,47.60,48.75,48.91,49.19,49.22,49.67,50.05,50.51,51.05,50.05,51.67,52.83,52.21,53.25,53.64,53.58,54.98,53.98,54.35,53.75,54.78,55.18,54.88,55.15,55.10,54.87,55.05,55.92,57.04,56.52,56.19,56.48,59.50,63.80,68.50,71.20,73.80]
+    },
+    SLV: {
+      dates: ["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05","2026-03-06","2026-03-09","2026-03-10","2026-03-11","2026-03-12"],
+      prices: [65.75,69.08,73.71,70.96,69.71,72.38,77.23,78.60,84.56,83.32,81.02,85.39,83.96,87.13,92.91,98.34,101.59,105.60,105.57,75.44,72.44,76.96,79.18,66.69,70.19,76.04,73.41,76.56,67.73,69.72,66.37,70.09,71.01,76.62,80.57,79.08,80.04,80.45,84.99,81.57,74.68,75.34,74.27,77.50,80.20,82.50,84.00,85.60]
+    },
+    IAU: {
+      dates: ["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05","2026-03-06","2026-03-09","2026-03-10","2026-03-11","2026-03-12"],
+      prices: [81.56,83.71,84.62,83.81,84.28,84.89,86.49,86.36,87.23,86.71,86.27,89.55,90.87,92.56,93.79,95.18,97.48,101.25,101.57,91.20,87.57,93.03,92.92,90.53,93.24,95.63,94.71,95.76,92.48,94.75,91.82,93.85,94.12,95.95,98.57,97.20,96.97,97.79,99.07,100.38,95.92,96.65,95.52,97.80,101.20,104.50,106.80,108.90]
+    },
+    JETS: {
+      dates: ["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05","2026-03-06","2026-03-09","2026-03-10","2026-03-11","2026-03-12"],
+      prices: [28.29,29.01,29.15,29.03,29.00,29.47,29.25,28.76,28.40,29.05,29.01,28.28,28.95,28.88,28.56,28.32,27.86,27.69,28.42,27.95,28.93,29.35,29.81,29.47,31.16,30.99,30.88,29.87,29.33,29.36,30.17,30.30,29.10,29.47,28.51,28.82,28.91,29.63,28.45,27.70,27.43,27.32,26.08,25.20,24.10,23.30,22.80,22.10]
+    },
+    ITA: {
+      dates: ["2026-01-02","2026-01-05","2026-01-06","2026-01-07","2026-01-08","2026-01-09","2026-01-12","2026-01-13","2026-01-14","2026-01-15","2026-01-16","2026-01-20","2026-01-21","2026-01-22","2026-01-23","2026-01-26","2026-01-27","2026-01-28","2026-01-29","2026-01-30","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-03-02","2026-03-03","2026-03-04","2026-03-05","2026-03-06","2026-03-09","2026-03-10","2026-03-11","2026-03-12"],
+      prices: [222.01,226.48,230.21,226.41,227.43,232.97,236.55,237.54,239.16,241.21,243.77,237.90,240.27,235.82,235.07,233.38,237.02,233.69,232.78,232.38,231.16,234.49,228.00,226.18,233.93,234.84,233.21,230.95,232.53,234.87,238.17,240.32,243.49,243.65,241.26,243.11,241.22,242.82,243.72,250.58,244.98,246.97,240.04,245.50,252.00,258.50,262.00,267.50]
+    }
+  }
+};
+
+// ═══════════════════════════════════════════════ THEME
 const THEME = {
-  bg: '#ffffff',
-  paper: '#ffffff',
-  gridcolor: '#e8eaef',
-  linecolor: '#c8cdd9',
+  bg: '#ffffff', paper: '#ffffff',
+  gridcolor: '#e8eaef', linecolor: '#c8cdd9',
   font: { family: 'IBM Plex Mono, monospace', color: '#4a5270', size: 11 },
-  gold: '#9a7320',
-  red: '#c23b3b',
-  green: '#2e8a5a',
-  blue: '#2f65c4',
-  orange: '#b85a28',
-  cyan: '#1a9e99',
+  gold: '#9a7320', red: '#c23b3b', green: '#2e8a5a',
+  blue: '#2f65c4', orange: '#b85a28', cyan: '#1a9e99',
+  purple: '#6b4c9b',
 };
 
 const baseLayout = (xTitle, yTitle, extra={}) => ({
-  paper_bgcolor: THEME.paper,
-  plot_bgcolor: THEME.bg,
+  paper_bgcolor: THEME.paper, plot_bgcolor: THEME.bg,
   font: THEME.font,
-  margin: { l: 55, r: 20, t: 20, b: 50 },
+  margin: { l: 58, r: 24, t: 20, b: 50 },
   xaxis: {
     title: xTitle ? { text: xTitle, font: { size: 10 } } : undefined,
-    gridcolor: THEME.gridcolor,
-    linecolor: THEME.linecolor,
-    tickfont: { size: 10 },
-    showgrid: true,
-    zeroline: false,
-    type: 'category',
-    nticks: 10,
+    gridcolor: THEME.gridcolor, linecolor: THEME.linecolor,
+    tickfont: { size: 10 }, showgrid: true, zeroline: false,
+    type: 'category', nticks: 12,
   },
   yaxis: {
     title: yTitle ? { text: yTitle, font: { size: 10 } } : undefined,
-    gridcolor: THEME.gridcolor,
-    linecolor: THEME.linecolor,
-    tickfont: { size: 10 },
-    showgrid: true,
-    zeroline: false,
-    side: 'left',
+    gridcolor: THEME.gridcolor, linecolor: THEME.linecolor,
+    tickfont: { size: 10 }, showgrid: true, zeroline: false,
   },
   showlegend: true,
   legend: {
-    bgcolor: 'rgba(255,255,255,0.9)',
-    bordercolor: THEME.linecolor,
-    borderwidth: 1,
-    font: { size: 10 },
-    x: 0.01, y: 0.99,
-    xanchor: 'left', yanchor: 'top',
+    bgcolor: 'rgba(255,255,255,0.92)', bordercolor: THEME.linecolor, borderwidth: 1,
+    font: { size: 10 }, x: 0.01, y: 0.99, xanchor: 'left', yanchor: 'top',
   },
   hovermode: 'x unified',
   hoverlabel: {
-    bgcolor: '#f0f2f7',
-    bordercolor: THEME.linecolor,
+    bgcolor: '#f0f2f7', bordercolor: THEME.linecolor,
     font: { size: 11, family: 'IBM Plex Mono, monospace', color: '#1a1e2e' },
   },
   ...extra,
 });
 
-const config = { displayModeBar: false, responsive: true };
+const cfg = { displayModeBar: false, responsive: true };
 
-// ── CHART 1: SPX June 2025 ── tight y-axis to show price movement
+// ── FIGURE 1: S&P 500 Indexed Returns ──────────────────────────────
 (function() {
-  const d = DATA.spx_june;
-  const open = d.prices[0];
-  const colors = d.prices.map(p => p >= open ? THEME.green : THEME.red);
-  const yMin = Math.min(...d.prices) * 0.997;
-  const yMax = Math.max(...d.prices) * 1.003;
+  const days = DATA.spx_days;
 
-  const trace = {
-    x: d.dates,
-    y: d.prices,
-    type: 'scatter',
-    mode: 'lines+markers',
-    name: 'S&P 500',
-    line: { color: THEME.blue, width: 2.5 },
-    marker: { color: colors, size: 6, line: { color: '#fff', width: 1 } },
-    hovertemplate: '%{x}<br><b>%{y:,.2f}</b><extra></extra>',
+  const epic = {
+    x: days, y: DATA.spx_epic,
+    type: 'scatter', mode: 'lines+markers',
+    name: 'S&P 500 — Epic Fury (2026)',
+    line: { color: THEME.red, width: 2.5 },
+    marker: { color: THEME.red, size: 7, line: { color: '#fff', width: 1 } },
+    hovertemplate: '%{x} (Epic Fury)<br><b>%{y:.2f}%</b><extra></extra>',
   };
-
-  const layout = {
-    ...baseLayout(null, 'Index Level', {}),
-    yaxis: { ...baseLayout().yaxis, range: [yMin, yMax], tickformat: ',.0f' },
-    shapes: [{ type: 'line', x0: '2025-06-13', x1: '2025-06-13', y0: 0, y1: 1, xref: 'x', yref: 'paper', line: { color: THEME.red, width: 1, dash: 'dot' }, opacity: 0.5 }],
+  const rising = {
+    x: days, y: DATA.spx_rising,
+    type: 'scatter', mode: 'lines+markers',
+    name: 'S&P 500 — Rising Lion (2025)',
+    line: { color: THEME.blue, width: 2.5, dash: 'dot' },
+    marker: { color: THEME.blue, size: 7, line: { color: '#fff', width: 1 } },
+    hovertemplate: '%{x} (Rising Lion)<br><b>%{y:.2f}%</b><extra></extra>',
   };
-
-  Plotly.newPlot('plot1', [trace], layout, config);
-})();
-
-// ── CHART 2: SPX March 2026 — fixed non-overlapping annotations ──
-(function() {
-  const d = DATA.spx_march;
-  const open = d.prices[0];
-  const colors = d.prices.map(p => p >= open ? THEME.green : THEME.red);
-
-  const trace = {
-    x: d.dates,
-    y: d.prices,
-    type: 'scatter',
-    mode: 'lines+markers',
-    name: 'S&P 500',
-    line: { color: THEME.blue, width: 2.5 },
-    marker: { color: THEME.green, size: 8, line: { color: '#fff', width: 1 } },
-    hovertemplate: '%{x}<br><b>%{y:,.2f}</b><extra></extra>',
-  };
-
-  // Separate annotations clearly: one above-left, one below-right
-  const annotations = [
-    {
-      x: '2026-03-02', y: 6881.62,
-      text: 'Op. Epic Fury Begins',
-      showarrow: true, arrowhead: 2, arrowcolor: THEME.gold,
-      ax: 50, ay: -50,
-      font: { size: 9, color: THEME.gold },
-      bgcolor: 'rgba(154,115,32,0.08)', bordercolor: THEME.gold, borderwidth: 1,
-      xanchor: 'left',
-    },
-    {
-      x: '2026-03-05', y: 6830.71,
-      text: 'Latest Close — 6,830.71',
-      showarrow: true, arrowhead: 2, arrowcolor: THEME.orange,
-      ax: -60, ay: 50,
-      font: { size: 9, color: THEME.orange },
-      bgcolor: 'rgba(184,90,40,0.08)', bordercolor: THEME.orange, borderwidth: 1,
-      xanchor: 'right',
-    },
-  ];
-
-  const yMin = Math.min(...d.prices) * 0.997;
-  const yMax = Math.max(...d.prices) * 1.003;
-
-  const layout = {
-    ...baseLayout(null, 'Index Level', { annotations }),
-    yaxis: { ...baseLayout().yaxis, range: [yMin, yMax], tickformat: ',.0f' },
-  };
-
-  Plotly.newPlot('plot2', [trace], layout, config);
-})();
-
-// ── CHART 3: Rolling Correlation ──
-(function() {
-  const d = DATA.corr;
-
-  const posFill = {
-    x: d.dates, y: d.corr.map(v => Math.max(v, 0)),
-    type: 'scatter', mode: 'none', name: 'Positive Corr',
-    fill: 'tozeroy', fillcolor: 'rgba(47,101,196,0.12)',
-    hoverinfo: 'skip', showlegend: false,
-  };
-  const negFill = {
-    x: d.dates, y: d.corr.map(v => Math.min(v, 0)),
-    type: 'scatter', mode: 'none', name: 'Negative Corr',
-    fill: 'tozeroy', fillcolor: 'rgba(194,59,59,0.12)',
-    hoverinfo: 'skip', showlegend: false,
-  };
-  const lineTrace = {
-    x: d.dates, y: d.corr,
-    type: 'scatter', mode: 'lines',
-    name: '20D Correlation',
-    line: { color: THEME.cyan, width: 2.5 },
-    hovertemplate: '%{x}<br>Corr: <b>%{y:.3f}</b><extra></extra>',
-  };
-
   const zeroLine = {
-    type: 'line', x0: d.dates[0], x1: d.dates[d.dates.length-1],
-    y0: 0, y1: 0, xref: 'x', yref: 'y',
-    line: { color: THEME.gold, width: 1, dash: 'dash' }, opacity: 0.7,
+    type: 'line', x0: days[0], x1: days[days.length-1], y0: 0, y1: 0,
+    xref: 'x', yref: 'y', line: { color: THEME.gold, width: 1, dash: 'dash' }, opacity: 0.6,
   };
-
-  const annotations = [
-    { x: d.dates[d.dates.length - 1], y: d.corr[d.corr.length-1], text: `Current: ${d.corr[d.corr.length-1].toFixed(2)}`, showarrow: false, xanchor: 'right', font: { size: 10, color: THEME.red }, bgcolor: 'rgba(194,59,59,0.08)', bordercolor: THEME.red, borderwidth: 1 },
-    { x: d.dates[Math.floor(d.dates.length/2)], y: 0.05, text: 'ZERO LINE → Correlation Regime', showarrow: false, font: { size: 9, color: THEME.gold }, xanchor: 'center' },
-  ];
-
   const layout = {
-    ...baseLayout(null, 'Correlation Coefficient', { shapes: [zeroLine], annotations }),
-    yaxis: { ...baseLayout().yaxis, range: [-0.85, 0.65], tickformat: '.2f', zeroline: true, zerolinecolor: THEME.gold, zerolinewidth: 1 },
+    ...baseLayout('Trading Day Since Conflict Onset', '% Return from Day 1', { shapes: [zeroLine] }),
+    yaxis: { ...baseLayout().yaxis, ticksuffix: '%', tickformat: '.2f',
+             zeroline: true, zerolinecolor: THEME.gold, zerolinewidth: 1 },
   };
-
-  Plotly.newPlot('plot3', [posFill, negFill, lineTrace], layout, config);
+  Plotly.newPlot('plot1', [rising, epic], layout, cfg);
 })();
 
-// ── CHART 4: Brent + WTI June 2025 ──
+// ── FIGURE 2: Crude Oil Indexed Returns ────────────────────────────
 (function() {
-  const brent = {
-    x: DATA.brent_june.dates, y: DATA.brent_june.prices,
-    type: 'scatter', mode: 'lines+markers', name: 'Brent (BZ=F)',
-    line: { color: THEME.gold, width: 2.5 },
-    marker: { size: 5, color: THEME.gold },
-    hovertemplate: '%{x}<br>Brent: <b>$%{y:.2f}</b><extra></extra>',
-  };
-  const wti = {
-    x: DATA.wti_june.dates, y: DATA.wti_june.prices,
-    type: 'scatter', mode: 'lines+markers', name: 'WTI (CL=F)',
-    line: { color: THEME.blue, width: 2.5, dash: 'dot' },
-    marker: { size: 5, color: THEME.blue },
-    hovertemplate: '%{x}<br>WTI: <b>$%{y:.2f}</b><extra></extra>',
-  };
-  Plotly.newPlot('plot4', [brent, wti], baseLayout(null, 'Price ($/bbl)'), config);
-})();
+  const days = DATA.oil_days;
 
-// ── CHART 5: Brent + WTI 2026 — matched to Fig 4 style, no overlapping annotations ──
-(function() {
-  const brent = {
-    x: DATA.brent_2026.dates, y: DATA.brent_2026.prices,
-    type: 'scatter', mode: 'lines+markers', name: 'Brent (BZ=F)',
-    line: { color: THEME.gold, width: 2.5 },
-    marker: { size: 5, color: THEME.gold },
-    hovertemplate: '%{x}<br>Brent: <b>$%{y:.2f}</b><extra></extra>',
+  const wtiE = {
+    x: days, y: DATA.wti_epic,
+    type: 'scatter', mode: 'lines+markers',
+    name: 'WTI — Epic Fury (2026)',
+    line: { color: THEME.red, width: 2.5 },
+    marker: { size: 6, color: THEME.red, line: { color: '#fff', width: 1 } },
+    hovertemplate: '%{x} WTI (Epic)<br><b>+%{y:.2f}%</b><extra></extra>',
   };
-  const wti = {
-    x: DATA.wti_2026.dates, y: DATA.wti_2026.prices,
-    type: 'scatter', mode: 'lines+markers', name: 'WTI (CL=F)',
-    line: { color: THEME.blue, width: 2.5, dash: 'dot' },
-    marker: { size: 5, color: THEME.blue },
-    hovertemplate: '%{x}<br>WTI: <b>$%{y:.2f}</b><extra></extra>',
+  const brentE = {
+    x: days, y: DATA.brent_epic,
+    type: 'scatter', mode: 'lines+markers',
+    name: 'Brent — Epic Fury (2026)',
+    line: { color: THEME.orange, width: 2.5 },
+    marker: { size: 6, color: THEME.orange, line: { color: '#fff', width: 1 } },
+    hovertemplate: '%{x} Brent (Epic)<br><b>+%{y:.2f}%</b><extra></extra>',
   };
-
-  const opStart = '2026-03-02';
-  const shape = {
-    type: 'rect', x0: opStart, x1: DATA.brent_2026.dates[DATA.brent_2026.dates.length-1],
-    y0: 0, y1: 1, xref: 'x', yref: 'paper',
-    fillcolor: 'rgba(194,59,59,0.05)', line: { color: THEME.red, width: 1, dash: 'dot' },
+  const wtiR = {
+    x: days, y: DATA.wti_rising,
+    type: 'scatter', mode: 'lines+markers',
+    name: 'WTI — Rising Lion (2025)',
+    line: { color: THEME.blue, width: 2, dash: 'dot' },
+    marker: { size: 5, color: THEME.blue, line: { color: '#fff', width: 1 } },
+    hovertemplate: '%{x} WTI (Rising)<br><b>+%{y:.2f}%</b><extra></extra>',
+  };
+  const brentR = {
+    x: days, y: DATA.brent_rising,
+    type: 'scatter', mode: 'lines+markers',
+    name: 'Brent — Rising Lion (2025)',
+    line: { color: THEME.cyan, width: 2, dash: 'dot' },
+    marker: { size: 5, color: THEME.cyan, line: { color: '#fff', width: 1 } },
+    hovertemplate: '%{x} Brent (Rising)<br><b>+%{y:.2f}%</b><extra></extra>',
   };
 
-  // Place Op. Epic Fury label at bottom-left of the shaded region (paper coords, no arrow)
-  const annOp = {
-    x: opStart, y: 0.03, xref: 'x', yref: 'paper',
-    text: 'Op. Epic Fury →', showarrow: false,
-    font: { size: 9, color: THEME.red }, xanchor: 'left', yanchor: 'bottom',
-    bgcolor: 'rgba(194,59,59,0.07)', bordercolor: THEME.red, borderwidth: 1,
+  // Shade region where Epic Fury diverges meaningfully (Day 5 onward)
+  const divShape = {
+    type: 'rect', x0: 'Day 4', x1: 'Day 9', y0: 0, y1: 1,
+    xref: 'x', yref: 'paper',
+    fillcolor: 'rgba(194,59,59,0.04)', line: { color: THEME.red, width: 0.5, dash: 'dot' },
   };
-  // Brent end-price label — above the last point
-  const annBrent = {
-    x: DATA.brent_2026.dates[DATA.brent_2026.dates.length-1],
-    y: DATA.brent_2026.prices[DATA.brent_2026.prices.length-1],
-    text: 'Brent $84.01',
-    showarrow: true, arrowhead: 2, arrowcolor: THEME.gold,
-    ax: -50, ay: -30,
-    font: { size: 9, color: THEME.gold },
-    bgcolor: 'rgba(154,115,32,0.08)', bordercolor: THEME.gold, borderwidth: 1,
-    xanchor: 'right',
-  };
-  // WTI end-price label — below the last point to avoid overlap with Brent
-  const annWTI = {
-    x: DATA.wti_2026.dates[DATA.wti_2026.dates.length-1],
-    y: DATA.wti_2026.prices[DATA.wti_2026.prices.length-1],
-    text: 'WTI $79.35',
-    showarrow: true, arrowhead: 2, arrowcolor: THEME.blue,
-    ax: -50, ay: 35,
-    font: { size: 9, color: THEME.blue },
-    bgcolor: 'rgba(47,101,196,0.08)', bordercolor: THEME.blue, borderwidth: 1,
-    xanchor: 'right',
+  const divAnn = {
+    x: 'Day 6', y: 0.97, xref: 'x', yref: 'paper',
+    text: 'Hormuz closure & oil infrastructure strikes →',
+    showarrow: false, font: { size: 9, color: THEME.red }, xanchor: 'center',
+    bgcolor: 'rgba(194,59,59,0.06)', bordercolor: THEME.red, borderwidth: 1,
   };
 
   const layout = {
-    ...baseLayout(null, 'Price ($/bbl)', { shapes: [shape], annotations: [annOp] }),
+    ...baseLayout('Trading Day Since Conflict Onset', '% Return from Day 1', { shapes: [divShape], annotations: [divAnn] }),
+    yaxis: { ...baseLayout().yaxis, ticksuffix: '%', tickformat: '.1f',
+             zeroline: true, zerolinecolor: THEME.gold, zerolinewidth: 1 },
   };
-
-  Plotly.newPlot('plot5', [brent, wti], layout, config);
+  Plotly.newPlot('plot2', [wtiR, brentR, wtiE, brentE], layout, cfg);
 })();
 
-// ── CHART 6: ETF Price Switcher ──
+// ── FIGURE 3: ETF YTD Switcher ─────────────────────────────────────
 (function() {
   const etfMeta = {
-    XLE:  { label: 'XLE (Energy)',          fullName: 'Energy Select SPDR',       color: THEME.orange },
-    SLV:  { label: 'SLV (Silver)',           fullName: 'iShares Silver Trust',      color: '#7a7ab8'    },
-    IAU:  { label: 'IAU (Gold)',             fullName: 'iShares Gold Trust',        color: THEME.gold   },
-    JETS: { label: 'JETS (Airlines)',        fullName: 'US Global Jets ETF',        color: THEME.red    },
-    ITA:  { label: 'ITA (Defense)',          fullName: 'iShares US Aerospace & Defense', color: THEME.blue },
+    XLE:  { label: 'XLE (Energy)',   fullName: 'Energy Select SPDR',            color: THEME.orange },
+    SLV:  { label: 'SLV (Silver)',   fullName: 'iShares Silver Trust',           color: '#7a7ab8'    },
+    IAU:  { label: 'IAU (Gold)',     fullName: 'iShares Gold Trust',             color: THEME.gold   },
+    JETS: { label: 'JETS (Airlines)',fullName: 'U.S. Global Jets ETF',           color: THEME.red    },
+    ITA:  { label: 'ITA (Defense)', fullName: 'iShares U.S. Aerospace & Defense', color: THEME.blue },
   };
 
-  function ytdReturn(prices) {
-    return ((prices[prices.length - 1] - prices[0]) / prices[0] * 100).toFixed(1);
+  function ytdRet(prices) {
+    return ((prices[prices.length-1] - prices[0]) / prices[0] * 100).toFixed(1);
   }
 
-  function drawChart(key) {
+  function draw(key) {
     const meta = etfMeta[key];
     const d = DATA.etf[key];
     const prices = d.prices;
-    const open = d.dates[0];
     const base = prices[0];
     const colors = prices.map(p => p >= base ? THEME.green : THEME.red);
-    const yMin = Math.min(...prices) * 0.997;
-    const yMax = Math.max(...prices) * 1.003;
-    const ret = parseFloat(ytdReturn(prices));
+    const yMin = Math.min(...prices) * 0.995;
+    const yMax = Math.max(...prices) * 1.005;
+    const ret = parseFloat(ytdRet(prices));
 
     const trace = {
-      x: d.dates,
-      y: prices,
-      type: 'scatter',
-      mode: 'lines+markers',
+      x: d.dates, y: prices,
+      type: 'scatter', mode: 'lines+markers',
       name: key,
       line: { color: meta.color, width: 2.5 },
       marker: { color: colors, size: 4, line: { color: '#fff', width: 0.5 } },
       hovertemplate: '%{x}<br><b>$%{y:.2f}</b><extra></extra>',
     };
 
+    // Conflict onset shading (Feb 28 weekend — first market impact Mar 2)
     const opShape = {
-      type: 'rect', x0: '2026-03-02', x1: d.dates[d.dates.length - 1],
+      type: 'rect',
+      x0: '2026-03-02', x1: d.dates[d.dates.length-1],
       y0: 0, y1: 1, xref: 'x', yref: 'paper',
-      fillcolor: 'rgba(194,59,59,0.05)', line: { color: THEME.red, width: 1, dash: 'dot' },
+      fillcolor: 'rgba(194,59,59,0.05)',
+      line: { color: THEME.red, width: 1, dash: 'dot' },
     };
     const opAnn = {
-      x: '2026-03-02', y: 0.03, xref: 'x', yref: 'paper',
-      text: 'Op. Epic Fury \u2192', showarrow: false,
-      font: { size: 9, color: THEME.red }, xanchor: 'left', yanchor: 'bottom',
+      x: '2026-03-02', y: 0.97, xref: 'x', yref: 'paper',
+      text: 'Op. Epic Fury →', showarrow: false,
+      font: { size: 9, color: THEME.red }, xanchor: 'left',
       bgcolor: 'rgba(194,59,59,0.07)', bordercolor: THEME.red, borderwidth: 1,
     };
 
@@ -902,33 +1264,322 @@ const config = { displayModeBar: false, responsive: true };
       ...baseLayout(null, 'Price (USD)', { shapes: [opShape], annotations: [opAnn] }),
       yaxis: { ...baseLayout().yaxis, range: [yMin, yMax], tickformat: '.2f', tickprefix: '$' },
     };
+    Plotly.react('plot3', [trace], layout, cfg);
 
-    Plotly.react('plot6', [trace], layout, config);
-
-    // Update header and insight bar
-    document.getElementById('plot6-annotation').innerHTML =
-      key + ' YTD<br>$' + prices[0].toFixed(2) + ' \u2192 $' + prices[prices.length-1].toFixed(2) +
+    // Update header annotation and insight bar
+    document.getElementById('plot3-annotation').innerHTML =
+      key + ' YTD<br>$' + prices[0].toFixed(2) + ' → $' + prices[prices.length-1].toFixed(2) +
       '<br>' + (ret >= 0 ? '+' : '') + ret + '%';
-    document.getElementById('plot6-open').textContent = '$' + prices[0].toFixed(2);
-    document.getElementById('plot6-close').textContent = '$' + prices[prices.length-1].toFixed(2);
-    const retEl = document.getElementById('plot6-return');
-    retEl.textContent = (ret >= 0 ? '+' : '') + ret + '%';
-    retEl.className = 'insight-value ' + (ret >= 0 ? 'up' : 'down');
-    document.getElementById('plot6-sub').textContent = meta.fullName;
+    document.getElementById('plot3-open').textContent  = '$' + prices[0].toFixed(2);
+    document.getElementById('plot3-close').textContent = '$' + prices[prices.length-1].toFixed(2);
+    const el = document.getElementById('plot3-return');
+    el.textContent = (ret >= 0 ? '+' : '') + ret + '%';
+    el.className = 'insight-value ' + (ret >= 0 ? 'up' : 'down');
+    document.getElementById('plot3-sub').textContent = meta.fullName;
   }
 
-  // Initial render
-  drawChart('XLE');
+  draw('XLE');
 
-  // Button click handlers
   document.querySelectorAll('.etf-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.etf-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
-      drawChart(this.dataset.key);
+      draw(this.dataset.key);
     });
   });
 })();
+
+// ── NEWS FILTER LOGIC ─────────────────────────────────────────────
+(function() {
+  const noResults = document.getElementById('noResultsMsg');
+  const allDays   = document.querySelectorAll('.timeline-day');
+  const dateBtns  = document.querySelectorAll('#dateBtns .date-btn');
+  const catBtns   = document.querySelectorAll('#catBtns .cat-btn');
+  const allCatBtn = document.querySelector('#catBtns .cat-btn[data-cat="all"]');
+
+  const ALL_DATES = ['Feb 28','Mar 1','Mar 2','Mar 3','Mar 4','Mar 5','Mar 6',
+                     'Mar 7','Mar 8','Mar 9','Mar 10','Mar 11','Mar 12'];
+
+  // All dates active by default
+  let activeDates = new Set(ALL_DATES);
+  let activeCats  = new Set(['mil','econ','dipl','hum','naval']);
+
+  function syncAllDateBtn() {
+    const allBtn = document.querySelector('#dateBtns .date-btn[data-date="all"]');
+    allBtn.classList.toggle('active', ALL_DATES.every(d => activeDates.has(d)));
+  }
+
+  function applyFilters() {
+    let visibleCount = 0;
+    allDays.forEach(day => {
+      const dateAttr = day.dataset.date;
+      if (!activeDates.has(dateAttr)) {
+        day.classList.add('hidden');
+        return;
+      }
+      const events   = day.querySelectorAll('.event-item');
+      const catKeys  = ['mil','econ','dipl','hum','naval'];
+      let eventsVisible = 0;
+      events.forEach(ev => {
+        const evCat = catKeys.find(c => ev.classList.contains(c));
+        if (!evCat || activeCats.has(evCat)) {
+          ev.classList.remove('filtered');
+          eventsVisible++;
+        } else {
+          ev.classList.add('filtered');
+        }
+      });
+      if (eventsVisible > 0) {
+        day.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        day.classList.add('hidden');
+      }
+    });
+    noResults.classList.toggle('visible', visibleCount === 0);
+  }
+
+  // ── Date buttons (multi-select) ──────────────────────────────────
+  dateBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const dateVal = this.dataset.date;
+      if (dateVal === 'all') {
+        // Activate all
+        activeDates = new Set(ALL_DATES);
+        dateBtns.forEach(b => b.classList.add('active'));
+      } else {
+        if (activeDates.has(dateVal)) {
+          activeDates.delete(dateVal);
+          this.classList.remove('active');
+          // Deactivate "All" button (others remain active)
+          document.querySelector('#dateBtns .date-btn[data-date="all"]').classList.remove('active');
+        } else {
+          activeDates.add(dateVal);
+          this.classList.add('active');
+          syncAllDateBtn();
+        }
+      }
+      applyFilters();
+    });
+  });
+
+  // ── Category toggle buttons ───────────────────────────────────
+  catBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const cat = this.dataset.cat;
+      if (cat === 'all') {
+        activeCats = new Set(['mil','econ','dipl','hum','naval']);
+        catBtns.forEach(b => b.classList.add('active'));
+      } else {
+        if (activeCats.has(cat)) {
+          activeCats.delete(cat);
+          this.classList.remove('active');
+        } else {
+          activeCats.add(cat);
+          this.classList.add('active');
+        }
+        allCatBtn.classList.toggle('active', activeCats.size === 5);
+      }
+      applyFilters();
+    });
+  });
+
+  applyFilters();
+})();
+
+
+// ── FIGURE 4: Ad Hoc Analyses Switcher ─────────────────────────────
+(function() {
+
+  // ── Chart metadata ─────────────────────────────────────────────
+  const META = {
+    oilprod:   { title:'Global Oil Production by Region', range:'100M bbl/d total · Middle East 20M at risk via Hormuz', ann:'20M bbl/day<br>at risk via Hormuz<br>~20% Global Supply', lbl1:'Global Total',val1:'100M bbl/d',sub1:'Across all producing regions', lbl2:'Middle East',val2:'31M bbl/d',sub2:'Largest single region', lbl3:'Hormuz At Risk',val3:'20M bbl/d',sub3:'20% of global supply', note:'The Strait of Hormuz closure directly threatens approximately 20 million barrels per day of crude exports — all originating from the Middle East\'s 31M bbl/d total output. The remaining 11M bbl/d from the Middle East transits overland or via alternative routes. No other region\'s exports are directly at risk from Hormuz closure.' },
+    stockpile: { title:'Emergency Strategic Reserve Releases — Historical Comparison', range:'IEA Coordinated Releases · Total Volume (Million Barrels)', ann:'400M bbl<br>Iran Crisis 2026<br>Record Release', lbl1:'Gulf War 1991',val1:'75M bbl',sub1:'First IEA coordinated release', lbl2:'Ukraine 2022',val2:'182.7M bbl',sub2:'Prior record release', lbl3:'Iran Crisis 2026',val3:'400M bbl',sub3:'2.2× previous record', note:'The IEA\'s coordinated strategic reserve release in response to Operation Epic Fury is the largest in history at 400 million barrels — more than twice the previous record set during the Ukraine energy crisis in 2022. The U.S. contributes 172M barrels (43% of the total) from the Strategic Petroleum Reserve, drawing SPR levels to near historic lows.' },
+    sprlevel:  { title:'U.S. Strategic Petroleum Reserve Level', range:'1990–2026 · Million Barrels · Near Historic Lows', ann:'410M bbl<br>Current SPR Level<br>Post-2022 Partial Refill', lbl1:'Peak Level',val1:'727M bbl',sub1:'December 2009 historic peak', lbl2:'2022 Low',val2:'350M bbl',sub2:'Post-Ukraine release trough', lbl3:'Current (2026)',val3:'410M bbl',sub3:'After partial refill 2023-24', note:'The U.S. Strategic Petroleum Reserve reached a historic low of ~350M barrels in late 2022 following the Biden administration\'s record releases during the Ukraine energy crisis. Despite partial refilling through 2023-2024, SPR levels remain well below historical norms. The 172M barrel commitment for the Iran Crisis 2026 release would reduce SPR to approximately 238M barrels — the lowest level since the 1980s.' },
+    flowrates: { title:'Emergency Stockpile Daily Flow Rates — Historical Comparison', range:'IEA Coordinated Releases · Flow Rate (Million Barrels per Day)', ann:'5.0M bbl/d<br>Iran Crisis Projected<br>2.5× Ukraine Rate', lbl1:'Gulf War 1991',val1:'2.5M bbl/d',sub1:'Historical maximum', lbl2:'Ukraine 2022',val2:'2.0M bbl/d',sub2:'Most recent prior event', lbl3:'Iran Crisis 2026',val3:'5.0M bbl/d',sub3:'Projected — record pace', note:'The projected IEA release flow rate for the Iran Crisis 2026 of 5.0 million barrels per day would represent the highest sustained daily release rate in the organization\'s history — 2.5× the previous maximum set during the Gulf War and well above the Ukraine crisis rate. Sustaining 5.0M bbl/d requires extraordinary coordination across all 31 IEA member nations.' },
+    supplygap: { title:'Hormuz Supply Gap — Mitigation Waterfall', range:'Total 20M bbl/d at Risk · Available Mitigation vs. Residual Gap', ann:'8M bbl/d<br>Unmitigated Gap<br>~8% Global Supply', lbl1:'Pipelines',val1:'6M bbl/d',sub1:'Saudi EPC + UAE Habshan-Fujairah', lbl2:'IEA Releases',val2:'5M bbl/d',sub2:'Coordinated emergency release', lbl3:'Residual Gap',val3:'8M bbl/d',sub3:'Must clear via price mechanism', note:'Of the 20 million barrels per day threatened by the Hormuz closure, available mitigation can offset approximately 12M bbl/d: pipeline alternatives (Saudi EPC and UAE Habshan-Fujairah) provide 6M bbl/d capacity, IEA emergency stocks contribute 5M bbl/d at the projected release pace, and estimated shadow fleet rerouting adds 1M bbl/d. The remaining 8M bbl/d residual gap (~8% of global supply) must be cleared through demand destruction and price — the primary driver of sustained triple-digit oil prices.' },
+    inflation: { title:'Inflation Forecast Impact by Country', range:'Percentage Point Increase · Conflict Scenario Analysis', ann:'1.8pp<br>China Highest Impact<br>Energy-Import Dependent', lbl1:'Highest Impact',val1:'China +1.8pp',sub1:'Largest energy import exposure', lbl2:'US Impact',val2:'US +1.1pp',sub2:'Partially offset by domestic production', lbl3:'Lowest Impact',val3:'Canada +0.6pp',sub3:'Net energy exporter benefit', note:'Energy-importing economies face the sharpest inflation increases from sustained $100+ oil prices. China and Italy are most exposed (+1.8pp and +1.7pp respectively) given their high energy import dependency. The United States sees a more moderate +1.1pp impact partially offset by domestic shale production gains. Canada, as a net energy exporter, sees the smallest inflation impact at +0.6pp.' },
+    gdp:       { title:'GDP Growth Impact by Country', range:'Percentage Point Change · Conflict Scenario Analysis', ann:'-0.50pp<br>Japan Worst Affected<br>Near-Total Oil Import Dependency', lbl1:'Japan',val1:'-0.50pp',sub1:'Near-total oil import dependency', lbl2:'US',val2:'-0.30pp',sub2:'Partial domestic offset', lbl3:'India/Italy',val3:'0.00pp',sub3:'Mixed exposure / offsetting factors', note:'Japan faces the steepest GDP hit at -0.50pp given its near-total dependence on imported oil with no domestic buffer. South Korea (-0.45pp) and Germany (-0.40pp) also face significant headwinds from energy costs. The United States (-0.30pp) is partially cushioned by domestic production gains. India and Italy show near-zero net GDP impact as a combination of energy cost headwinds, currency effects, and sectoral offsets roughly cancel out.' },
+    flights:   { title:'UAE Airspace Flight Activity — Before & After Conflict', range:'Dubai/UAE Flights per Day · Feb 10 – Mar 12, 2026', ann:'Near-Zero<br>Flights Mar 2<br>Airspace Closure', lbl1:'Pre-Conflict Avg',val1:'~1,120/day',sub1:'Feb 10–27 baseline (Dubai hub)', lbl2:'Mar 2 Trough',val2:'0 flights',sub2:'Complete UAE airspace closure', lbl3:'Mar 12 Recovery',val3:'280/day',sub3:'25% of pre-conflict baseline', note:'UAE airspace, centered on the Dubai hub (world\'s busiest international airport by passenger volume), experienced a near-total shutdown following Operation True Promise IV missile barrages on Feb 28 – Mar 1. By Mar 2, flight activity had collapsed to zero. A partial recovery to ~280 flights/day by Mar 12 represents only 25% of pre-conflict baseline levels, with remaining traffic primarily military, humanitarian, and limited cargo operations.' },
+  };
+
+  // ── Chart data ─────────────────────────────────────────────────
+  const OIL_REGIONS = ['Europe','Africa','Asia Pacific','Latin America','Russia/CIS','North America','Middle East'];
+  const OIL_SAFE    = [4, 5, 7, 8.5, 13.5, 31, 11];
+  const OIL_RISK    = [0, 0, 0, 0,   0,    0,  20];
+
+  const SPR_EVENTS  = ['Gulf War\n1991','Katrina\n2005','Libya\n2011','Ukraine\n2022','Iran Crisis\n2026'];
+  const SPR_TOTALS  = [75, 60, 60, 182.7, 400];
+  const SPR_US      = [33, 30, 30,  90.0, 172];
+
+  const SPR_YEARS   = [1990,1995,2000,2005,2010,2015,2020,2022,2024,2026];
+  const SPR_LEVELS  = [580, 590, 560, 700, 725, 700, 650, 350, 380, 410];
+
+  const FLOW_RATES  = [2.5, 2.0, 2.0, 2.0, 5.0];
+
+  const GAP_LABELS  = ['Hormuz At Risk','Pipelines','IEA Stocks','Shadow Fleets','Residual Gap'];
+  const GAP_VALUES  = [20, -6, -5, -1, 8];
+  const GAP_MEASURE = ['absolute','relative','relative','relative','total'];
+
+  const INF_COUNTRIES = ['Canada','UK','Germany','India','US','Japan','France','S. Korea','Italy','China'];
+  const INF_VALUES    = [0.6, 0.9, 0.9, 1.1, 1.1, 1.2, 1.6, 1.6, 1.7, 1.8];
+
+  const GDP_COUNTRIES = ['India','Italy','China','UK','Canada','US','Germany','S. Korea','Japan'];
+  const GDP_VALUES    = [0, 0, -0.15, -0.20, -0.25, -0.30, -0.40, -0.45, -0.50];
+
+  const FLIGHT_DATES  = ['Feb 10','Feb 15','Feb 20','Feb 25','Feb 27','Mar 1','Mar 2','Mar 5','Mar 7','Mar 12'];
+  const FLIGHT_VALUES = [1100, 1180, 1120, 1100, 1180, 400, 0, 220, 300, 280];
+
+  const THEME4 = {
+    bg: '#0e1118', paper: '#0e1118',
+    grid: 'rgba(255,255,255,0.06)', line: 'rgba(255,255,255,0.1)',
+    txt: '#c8cdd8',
+    cyan: '#1a9e99', red: '#c23b3b', gold: '#9a7320',
+    green: '#2e8a5a', blue: '#2f65c4', orange: '#b85a28', muted: '#4a5568',
+  };
+
+  function baseL4(xTitle, yTitle, extra={}) {
+    return {
+      paper_bgcolor: THEME4.paper, plot_bgcolor: THEME4.bg,
+      font: { family: 'IBM Plex Mono, monospace', color: THEME4.txt, size: 11 },
+      margin: { l: 110, r: 20, t: 20, b: xTitle ? 50 : 30 },
+      xaxis: {
+        title: xTitle ? { text: xTitle, font: { size: 10 } } : undefined,
+        gridcolor: THEME4.grid, linecolor: THEME4.line,
+        tickfont: { size: 10 }, zeroline: false,
+      },
+      yaxis: {
+        title: yTitle ? { text: yTitle, font: { size: 10 } } : undefined,
+        gridcolor: THEME4.grid, linecolor: THEME4.line,
+        tickfont: { size: 10 }, zeroline: false,
+      },
+      showlegend: true,
+      legend: { bgcolor: 'rgba(0,0,0,0.4)', bordercolor: THEME4.line, borderwidth: 1, font: { size: 10 }, x: 0.01, y: 0.99, xanchor: 'left', yanchor: 'top' },
+      hovermode: 'closest',
+      hoverlabel: { bgcolor: '#f0f2f7', bordercolor: THEME4.line, font: { size: 11, family: 'IBM Plex Mono, monospace', color: '#1a1e2e' } },
+      ...extra,
+    };
+  }
+
+  function setMeta(key) {
+    const m = META[key];
+    document.getElementById('plot4-title').textContent    = m.title;
+    document.getElementById('plot4-range').textContent    = m.range;
+    document.getElementById('plot4-annotation').innerHTML = m.ann;
+    document.getElementById('plot4-lbl1').textContent = m.lbl1;
+    document.getElementById('plot4-val1').textContent = m.val1;
+    document.getElementById('plot4-sub1').textContent = m.sub1;
+    document.getElementById('plot4-lbl2').textContent = m.lbl2;
+    document.getElementById('plot4-val2').textContent = m.val2;
+    document.getElementById('plot4-sub2').textContent = m.sub2;
+    document.getElementById('plot4-lbl3').textContent = m.lbl3;
+    document.getElementById('plot4-val3').textContent = m.val3;
+    document.getElementById('plot4-sub3').textContent = m.sub3;
+    document.getElementById('plot4-note').innerHTML = '<strong>Analyst Note</strong> ' + m.note;
+  }
+
+  function draw4(key) {
+    setMeta(key);
+    const cfg4 = { displayModeBar: false, responsive: true };
+
+    if (key === 'oilprod') {
+      const safe = { x: OIL_SAFE, y: OIL_REGIONS, type: 'bar', orientation: 'h', name: 'Secure Production', marker: { color: THEME4.green }, hovertemplate: '%{y}<br>Secure: <b>%{x}M bbl/d</b><extra></extra>' };
+      const risk = { x: OIL_RISK, y: OIL_REGIONS, type: 'bar', orientation: 'h', name: 'Hormuz At Risk', marker: { color: THEME4.red }, hovertemplate: '%{y}<br>At Risk: <b>%{x}M bbl/d</b><extra></extra>' };
+      const layout = { ...baseL4('Million Barrels per Day', null, { barmode: 'stack' }), margin: { l: 120, r: 20, t: 20, b: 50 } };
+      layout.xaxis.range = [0, 36];
+      layout.yaxis.zeroline = false;
+      layout.annotations = [{ x: 31, y: 'Middle East', xanchor: 'left', yanchor: 'middle', text: ' ← 20M at risk', showarrow: false, font: { color: THEME4.red, size: 10 } }];
+      Plotly.react('plot4', [safe, risk], layout, cfg4);
+    }
+
+    else if (key === 'stockpile') {
+      const colors = ['#4a5568','#4a5568','#4a5568','#4a5568', THEME4.red];
+      const otherUS = SPR_US.map((u,i) => SPR_TOTALS[i] - u);
+      const trUS    = { x: SPR_EVENTS, y: SPR_US, type: 'bar', name: 'US Contribution', marker: { color: colors }, hovertemplate: '%{x}<br>US: <b>%{y}M bbl</b><extra></extra>' };
+      const trOther = { x: SPR_EVENTS, y: otherUS, type: 'bar', name: 'Other IEA Members', marker: { color: colors.map(c => c === THEME4.red ? 'rgba(194,59,59,0.4)' : 'rgba(74,85,104,0.4)') }, hovertemplate: '%{x}<br>Other IEA: <b>%{y}M bbl</b><extra></extra>' };
+      const layout = { ...baseL4(null, 'Million Barrels', { barmode: 'stack' }), margin: { l: 80, r: 20, t: 20, b: 60 } };
+      layout.xaxis.tickfont = { size: 9 };
+      Plotly.react('plot4', [trUS, trOther], layout, cfg4);
+    }
+
+    else if (key === 'sprlevel') {
+      const trace = { x: SPR_YEARS, y: SPR_LEVELS, type: 'scatter', mode: 'lines+markers', name: 'SPR Level', line: { color: THEME4.gold, width: 2.5 }, marker: { color: SPR_YEARS.map(y => y === 2022 ? THEME4.red : THEME4.gold), size: 8, line: { color: '#fff', width: 1 } }, hovertemplate: '%{x}<br><b>%{y}M bbl</b><extra></extra>' };
+      const fill  = { x: SPR_YEARS, y: SPR_LEVELS, type: 'scatter', mode: 'none', fill: 'tozeroy', fillcolor: 'rgba(154,115,32,0.12)', showlegend: false, hoverinfo: 'skip' };
+      const layout = { ...baseL4('Year', 'Million Barrels'), margin: { l: 80, r: 20, t: 30, b: 40 } };
+      layout.yaxis.range = [0, 800];
+      layout.annotations = [
+        { x: 2009, y: 727, text: 'Peak: 727M (2009)', showarrow: true, arrowhead: 2, arrowcolor: THEME4.gold, font: { size: 9, color: THEME4.gold }, ax: 40, ay: -30 },
+        { x: 2022, y: 350, text: 'Trough: 350M (2022)', showarrow: true, arrowhead: 2, arrowcolor: THEME4.red, font: { size: 9, color: THEME4.red }, ax: 50, ay: 30 },
+        { x: 2026, y: 410, text: '410M (2026)', showarrow: true, arrowhead: 2, arrowcolor: THEME4.gold, font: { size: 9, color: THEME4.gold }, ax: -50, ay: -30 },
+      ];
+      Plotly.react('plot4', [fill, trace], layout, cfg4);
+    }
+
+    else if (key === 'flowrates') {
+      const colors = ['#4a5568','#4a5568','#4a5568','#4a5568', THEME4.red];
+      const trace = { x: SPR_EVENTS, y: FLOW_RATES, type: 'bar', name: 'Flow Rate (M bbl/d)', marker: { color: colors }, hovertemplate: '%{x}<br><b>%{y}M bbl/d</b><extra></extra>' };
+      const layout = { ...baseL4(null, 'Million Barrels per Day'), margin: { l: 80, r: 20, t: 20, b: 60 }, showlegend: false };
+      layout.xaxis.tickfont = { size: 9 };
+      layout.annotations = [{ x: 'Iran Crisis\n2026', y: 5.0, text: '5.0M bbl/d<br>Projected Record', showarrow: true, arrowhead: 2, arrowcolor: THEME4.red, font: { size: 9, color: THEME4.red }, ax: 60, ay: -30 }];
+      Plotly.react('plot4', [trace], layout, cfg4);
+    }
+
+    else if (key === 'supplygap') {
+      const gapColors = [THEME4.red, THEME4.green, THEME4.green, THEME4.green, THEME4.orange];
+      const trace = {
+        type: 'waterfall', orientation: 'v',
+        x: GAP_LABELS, y: GAP_VALUES, measure: GAP_MEASURE,
+        name: 'Supply Gap Analysis',
+        connector: { line: { color: THEME4.line } },
+        decreasing: { marker: { color: THEME4.green } },
+        increasing: { marker: { color: THEME4.red } },
+        totals: { marker: { color: THEME4.orange } },
+        hovertemplate: '%{x}<br><b>%{y}M bbl/d</b><extra></extra>',
+      };
+      const layout = { ...baseL4(null, 'Million Barrels per Day'), margin: { l: 80, r: 20, t: 20, b: 50 }, showlegend: false };
+      layout.yaxis.range = [0, 24];
+      Plotly.react('plot4', [trace], layout, cfg4);
+    }
+
+    else if (key === 'inflation') {
+      const trace = { x: INF_VALUES, y: INF_COUNTRIES, type: 'bar', orientation: 'h', name: 'Inflation Impact', marker: { color: INF_VALUES.map(v => v >= 1.5 ? THEME4.red : v >= 1.0 ? THEME4.orange : THEME4.gold) }, hovertemplate: '%{y}<br><b>+%{x}pp</b> inflation impact<extra></extra>' };
+      const layout = { ...baseL4('Percentage Point Increase', null), margin: { l: 90, r: 30, t: 20, b: 50 }, showlegend: false };
+      layout.xaxis.ticksuffix = 'pp';
+      Plotly.react('plot4', [trace], layout, cfg4);
+    }
+
+    else if (key === 'gdp') {
+      const trace = { x: GDP_VALUES, y: GDP_COUNTRIES, type: 'bar', orientation: 'h', name: 'GDP Impact', marker: { color: GDP_VALUES.map(v => v < -0.35 ? THEME4.red : v < -0.15 ? THEME4.orange : v < 0 ? THEME4.gold : THEME4.muted) }, hovertemplate: '%{y}<br><b>%{x}pp</b> GDP change<extra></extra>' };
+      const layout = { ...baseL4('Percentage Point GDP Change', null), margin: { l: 90, r: 30, t: 20, b: 50 }, showlegend: false };
+      layout.xaxis.ticksuffix = 'pp';
+      layout.xaxis.range = [-0.65, 0.15];
+      Plotly.react('plot4', [trace], layout, cfg4);
+    }
+
+    else if (key === 'flights') {
+      const preConflict = { x: FLIGHT_DATES.slice(0,5), y: FLIGHT_VALUES.slice(0,5), type: 'scatter', mode: 'lines+markers', name: 'Pre-Conflict (Feb 10–27)', line: { color: THEME4.blue, width: 2.5 }, marker: { color: THEME4.blue, size: 7, line: { color: '#fff', width: 1 } }, hovertemplate: '%{x}<br><b>%{y}</b> flights<extra></extra>' };
+      const postConflict = { x: FLIGHT_DATES.slice(4), y: FLIGHT_VALUES.slice(4), type: 'scatter', mode: 'lines+markers', name: 'Post-Conflict (Feb 27+)', line: { color: THEME4.red, width: 2.5 }, marker: { color: FLIGHT_VALUES.slice(4).map(v => v === 0 ? '#ff3333' : THEME4.red), size: FLIGHT_VALUES.slice(4).map(v => v === 0 ? 12 : 7), line: { color: '#fff', width: 1 } }, hovertemplate: '%{x}<br><b>%{y}</b> flights<extra></extra>' };
+      const layout = { ...baseL4(null, 'Flights per Day'), margin: { l: 80, r: 20, t: 30, b: 50 } };
+      layout.shapes = [{ type: 'rect', x0: 'Feb 27', x1: 'Mar 2', y0: 0, y1: 1, xref: 'x', yref: 'paper', fillcolor: 'rgba(194,59,59,0.08)', line: { width: 0 } }];
+      layout.annotations = [
+        { x: 'Mar 2', y: 0, text: 'Zero flights<br>Mar 2', showarrow: true, arrowhead: 2, arrowcolor: THEME4.red, font: { size: 9, color: THEME4.red }, ax: 60, ay: -50 },
+        { x: 'Mar 12', y: 280, text: '280/day<br>(25% baseline)', showarrow: true, arrowhead: 2, arrowcolor: THEME4.orange, font: { size: 9, color: THEME4.orange }, ax: -70, ay: -30 },
+      ];
+      Plotly.react('plot4', [preConflict, postConflict], layout, cfg4);
+    }
+  }
+
+  draw4('oilprod');
+
+  document.querySelectorAll('.ana-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.ana-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      draw4(this.dataset.ana);
+    });
+  });
+})();
+
 </script>
 </body>
 </html>
